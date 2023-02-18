@@ -1,8 +1,13 @@
 // Функция для проверки длины строки
 
 function validateLength (string, maxLength) {
-  return (string.length <= maxLength) ? true : false;
+  if (string.length <= maxLength) {
+    return true;
+  }
+  return false;
 }
+
+validateLength('проверяемая строка', 18);
 
 // Функция для проверки, является ли строка палиндромом
 
@@ -17,6 +22,8 @@ function checkIfPalindrome (string) {
   }
   return true;
 }
+
+checkIfPalindrome('Лёша на полке клопа нашёл ');
 
 /*
 Функция, которая принимает строку, извлекает содержащиеся в ней цифры от 0 до 9 и возвращает их в виде целого положительного числа.
@@ -33,6 +40,8 @@ function extractNumber (string) {
   }
   return parseFloat(result);
 }
+
+extractNumber('ECMAScript 2022');
 
 /*
 Функция, которая принимает три параметра: исходную строку, минимальную длину и строку с добавочными символами — и возвращает исходную строку,
@@ -54,4 +63,4 @@ function expandString (string, minLength, symbols) {
   return leftover + fillerText + string;
 }
 
-
+expandString('q', 4, 'we');
