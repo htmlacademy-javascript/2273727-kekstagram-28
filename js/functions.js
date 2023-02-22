@@ -1,27 +1,22 @@
 // Функция для проверки длины строки
 
-function validateLength (string, maxLength) {
-  if (string.length <= maxLength) {
-    return true;
-  }
-  return false;
-}
+const validateLength = (string, maxLength) => string.length <= maxLength;
 
 validateLength('проверяемая строка', 18);
 
 // Функция для проверки, является ли строка палиндромом
 
-function checkIfPalindrome (string) {
-  string = string.replaceAll(' ', '');
+const checkIfPalindrome = (string) => {
+  string = string.toLowerCase().replaceAll(' ', '');
   for (let i = 0; i < string.length; i++) {
     if (
-      string[i].toLowerCase() !== string.at(- 1 - i).toLowerCase()
+      string[i] !== string.at(- 1 - i)
     ) {
       return false;
     }
   }
   return true;
-}
+};
 
 checkIfPalindrome('Лёша на полке клопа нашёл ');
 
@@ -30,7 +25,7 @@ checkIfPalindrome('Лёша на полке клопа нашёл ');
 (Если хотите усложнить задание, предусмотрите случай, когда вместо строки приходит число)
 */
 
-function extractNumber (string) {
+const extractNumber = (string) => {
   string = string.toString();
   let result = '';
   for (let i = 0; i < string.length; i++) {
@@ -39,7 +34,7 @@ function extractNumber (string) {
     }
   }
   return parseFloat(result);
-}
+};
 
 extractNumber('ECMAScript 2022');
 
@@ -50,7 +45,7 @@ extractNumber('ECMAScript 2022');
 */
 
 
-function expandString (string, minLength, symbols) {
+const expandString = (string, minLength, symbols) => {
   const fillerLength = minLength - string.length;
   const filler = symbols.slice(0, fillerLength);
   const numberOfFillerUses = Math.floor((minLength - string.length) / symbols.length);
@@ -61,6 +56,6 @@ function expandString (string, minLength, symbols) {
     fillerText += filler;
   }
   return leftover + fillerText + string;
-}
+};
 
 expandString('q', 4, 'we');
