@@ -69,4 +69,5 @@ const createObject = () => ({
   comments: Array.from({length: getRandomInteger(1, MAX_COMMENTS)}, createComment)
 });
 
+// eslint-disable-next-line no-unused-vars
 const objects = Array.from({length: NUMBER_OF_OBJECTS}, createObject);
