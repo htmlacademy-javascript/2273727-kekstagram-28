@@ -50,24 +50,33 @@ const getUniqueRandomInteger = (min, max) => {
   };
 };
 
-const generateId = getUniqueRandomInteger(1, NUMBER_OF_OBJECTS);
 const generateUrl = getUniqueRandomInteger(1, NUMBER_OF_OBJECTS);
-const generateCommentId = getUniqueRandomInteger(1000, 9999);
+let generateId = 0;
+let generateCommentId = 0;
 
-const createComment = () => ({
-  id: generateCommentId(), // рандомный и уникальный для ВСЕХ комментариев
-  avatar: `img/avatar-${getRandomInteger(1, 6)}.svg`, // рандомный -> В задании этого нет, но сделать бы уникальным для одного объекта, но не для всех в целом. Олег, ты не подскажешь, как это можно реализовать?
-  message: MESSAGES[getRandomInteger(0, MESSAGES.length - 1)], // рандомное -> сделать бы уникальным для одного объекта, но не для всех в целом
-  name: NAMES[getRandomInteger(0, NAMES.length - 1)], // рандомное -> сделать бы уникальным для одного объекта, но не для всех в целом
-});
+const createComment = () => {
+  const generateAvatarId = getRandomInteger(1, 6);
+  const generateAvatar = `img/avatar-${generateAvatarId}.svg`;
+  const generateName = NAMES[generateAvatarId];
+  generateCommentId++;
+  return {
+    id: generateCommentId,
+    avatar: generateAvatar,
+    message: MESSAGES[getRandomInteger(0, MESSAGES.length - 1)],
+    name: generateName,
+  };
+};
 
-const createObject = () => ({
-  id: generateId(), // рандомный и уникальный
-  url: `photos/${generateUrl()}.jpg`, // рандомный и уникальный
-  description: DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)], // рандомное
-  likes: getRandomInteger(15, 200), // рандомное
-  comments: Array.from({length: getRandomInteger(1, MAX_COMMENTS)}, createComment)
-});
+const createObject = () => {
+  generateId++;
+  return {
+    id: generateId,
+    url: `photos/${generateUrl()}.jpg`,
+    description: DESCRIPTIONS[getRandomInteger(0, DESCRIPTIONS.length - 1)],
+    likes: getRandomInteger(15, 200),
+    comments: Array.from({length: getRandomInteger(1, MAX_COMMENTS)}, createComment),
+  };
+};
 
 // eslint-disable-next-line no-unused-vars
 const objects = Array.from({length: NUMBER_OF_OBJECTS}, createObject);
