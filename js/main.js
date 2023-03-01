@@ -57,12 +57,13 @@ let generateCommentId = 0;
 const createComment = () => {
   const generateAvatarId = getRandomInteger(1, 6);
   const generateAvatar = `img/avatar-${generateAvatarId}.svg`;
+  const generateMessage = Array.from({length: getRandomInteger(1, 2)}, () => MESSAGES[getUniqueRandomInteger(0, MESSAGES.length - 1)()]).join(' ');
   const generateName = NAMES[generateAvatarId];
   generateCommentId++;
   return {
     id: generateCommentId,
     avatar: generateAvatar,
-    message: MESSAGES[getRandomInteger(0, MESSAGES.length - 1)],
+    message: generateMessage,
     name: generateName,
   };
 };
