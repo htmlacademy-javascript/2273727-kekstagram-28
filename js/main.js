@@ -1,6 +1,6 @@
-import './redactor';
-import './upload';
-import './filter';
-import {renderPhotos} from './rendering';
+import {renderPhotos} from './rendering.js';
+import './filter.js';
+import './redactor.js';
+import './upload.js';
 renderPhotos();
 
