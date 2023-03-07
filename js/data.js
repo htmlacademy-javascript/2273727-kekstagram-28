@@ -1,3 +1,5 @@
+// создание псевдоданных
+
 import {getRandomInteger, getUniqueRandomInteger} from './util.js';
 
 const NUMBER_OF_OBJECTS = 25;
