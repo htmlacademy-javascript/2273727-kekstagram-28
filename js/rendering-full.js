@@ -1,6 +1,7 @@
 // логика отрисовщика большого фото и комментариев
 
 import {objects, picturesContainer} from './rendering-mini.js';
+import {renderComments} from './rendering-comments.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
@@ -14,10 +15,10 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.social__caption').textContent = objects[id].description;
     bigPicture.querySelector('.social__likes').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
+    renderComments(id);
 
-
-    bigPicture.querySelector('.social__comment-count').classList.add('hidden');
-    bigPicture.querySelector('.comments-loader').classList.add('hidden');
+    bigPicture.querySelector('.social__comment-count').classList.add('hidden'); // убрать в следующей ДЗ
+    bigPicture.querySelector('.comments-loader').classList.add('hidden'); // убрать в следующей ДЗ
 
     document.querySelector('body').classList.add('modal-open');
   }
