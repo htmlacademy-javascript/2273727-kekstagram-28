@@ -1,21 +1,26 @@
-// логика отрисовщика фото
+// логика отрисовщика миниатюр фото
 
 import {createObjects} from './data.js';
+
+const picturesContainer = document.querySelector('.pictures');
+const objects = createObjects();
 const renderPhotos = () => {
-  const objects = createObjects();
-  const picturesContainer = document.querySelector('.pictures');
   const fragment = document.createDocumentFragment();
   const pictureTemplate = document.querySelector('#picture').content;
 
   for (let i = 0; i < objects.length; i++) {
     const picture = pictureTemplate.cloneNode(true);
+    picture.querySelector('a').dataset.id = objects[i].id;
     picture.querySelector('.picture__img').src = objects[i].url;
+    picture.querySelector('.picture__img').alt = objects[i].description;
     picture.querySelector('.picture__likes').textContent = objects[i].likes;
     picture.querySelector('.picture__comments').textContent = objects[i].comments.length;
-    fragment.appendChild(picture);
+    fragment.append(picture);
   }
 
-  picturesContainer.appendChild(fragment);
+  picturesContainer.append(fragment);
 };
 
-export {renderPhotos};
+renderPhotos();
+
+export {objects, picturesContainer};

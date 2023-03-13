@@ -38,8 +38,8 @@ const NAMES = [
 ];
 
 const generateUrl = getUniqueRandomInteger(1, NUMBER_OF_OBJECTS);
-let generateId = 0;
-let generateCommentId = 0;
+let generateId = -1;
+let generateCommentId = -1;
 
 const createComment = () => {
   const generateAvatarId = getRandomInteger(1, 6);
