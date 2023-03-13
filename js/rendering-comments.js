@@ -21,10 +21,17 @@ const renderComments = (id) => {
     p.classList.add('social__text');
     p.textContent = objects[id].comments[i].message;
     li.appendChild(p);
+    if (fragment.children.length >= 5) {
+      li.classList.add('hidden');
+    }
     fragment.append(li);
   }
+
   commentContainer.innerHTML = '';
   commentContainer.append(fragment);
 };
 
 export {renderComments};
+
+// при нажатии на "загрузить еще" удалять класс hidden у элементов контейнера комментов из диапазона длиной в +5 к текущей длине
+// по идее функция должна снимать класс hidden у +5 элементов при клике и проверять, остались ли еще hidden элементы. Если не остались, то добавлять хидден уже самой кнопке

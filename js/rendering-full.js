@@ -17,8 +17,47 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
 
-    bigPicture.querySelector('.social__comment-count').classList.add('hidden'); // работа для следующей ДЗ
-    bigPicture.querySelector('.comments-loader').classList.add('hidden'); // работа для следующей ДЗ
+// подсчет комментариев
+    const commentContainer = document.querySelector('.social__comments');
+    const commentsLength = commentContainer.children.length;
+    bigPicture.querySelector('.visible-comments-count').textContent = commentsLength;
+
+    // if (commentContainer.children.length >= 5) {
+    //   for (let i = 5; i >= commentContainer.children.length; i++) {
+    //     commentContainer.children[i].classList.add('hidden');
+    //   }
+    // }
+
+
+// по идее функция должна снимать класс hidden у +5 элементов при клике и проверять, остались ли еще hidden элементы. Если не остались, то добавлять хидден уже самой кнопке
+    const commentsLoader = bigPicture.querySelector('.comments-loader');
+    const checkLoaderStatus = () => {
+      if (commentsLength <= 5) {
+        commentsLoader.classList.add('hidden');
+      } else {
+        commentsLoader.classList.remove('hidden');
+      }
+    };
+    checkLoaderStatus();
+
+    function onLoaderClick () {
+      let commentsVisibleLength = commentsLength; // возможно первые значения стоит убрать потому что КНОПКУ видно ТОЛЬКО тогда когда комментов больше 5
+      let commentsHiddenLength = 0;
+      if (commentsLength > 5) {
+        commentsVisibleLength = 5;
+        commentsHiddenLength = commentsLength - commentsVisibleLength;
+      }
+
+      for (let i = commentsVisibleLength; i <= commentsLength - 1; i++) {
+
+        commentContainer.children[i].classList.remove('hidden');
+      // commentsVisibleLength += 5;
+      }
+      console.log('Длина теперь' + commentsLength)
+      checkLoaderStatus();
+    }
+
+    commentsLoader.addEventListener('click', onLoaderClick);
 
     document.querySelector('body').classList.add('modal-open');
   }
