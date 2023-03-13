@@ -17,8 +17,8 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
 
-    bigPicture.querySelector('.social__comment-count').classList.add('hidden'); // убрать в следующей ДЗ
-    bigPicture.querySelector('.comments-loader').classList.add('hidden'); // убрать в следующей ДЗ
+    bigPicture.querySelector('.social__comment-count').classList.add('hidden'); // работа для следующей ДЗ
+    bigPicture.querySelector('.comments-loader').classList.add('hidden'); // работа для следующей ДЗ
 
     document.querySelector('body').classList.add('modal-open');
   }
@@ -41,4 +41,3 @@ document.addEventListener('keydown', () => {
     document.querySelector('body').classList.remove('modal-open');
   }
 });
-

@@ -12,12 +12,13 @@ const renderPhotos = () => {
     const picture = pictureTemplate.cloneNode(true);
     picture.querySelector('a').dataset.id = objects[i].id;
     picture.querySelector('.picture__img').src = objects[i].url;
+    picture.querySelector('.picture__img').alt = objects[i].description;
     picture.querySelector('.picture__likes').textContent = objects[i].likes;
     picture.querySelector('.picture__comments').textContent = objects[i].comments.length;
-    fragment.appendChild(picture);
+    fragment.append(picture);
   }
 
-  picturesContainer.appendChild(fragment);
+  picturesContainer.append(fragment);
 };
 
 renderPhotos();

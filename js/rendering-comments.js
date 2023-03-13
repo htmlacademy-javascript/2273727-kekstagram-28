@@ -1,4 +1,5 @@
 // логика рендера комментов
+
 import {objects} from './rendering-mini.js';
 
 const renderComments = (id) => {
@@ -13,17 +14,17 @@ const renderComments = (id) => {
     img.classList.add('social__picture');
     img.src = objects[id].comments[i].avatar;
     img.alt = objects[id].comments[i].name;
-    img.width = '35'; // возможно тут через style
-    img.height = '35'; // возможно тут через style
+    img.width = '35';
+    img.height = '35';
     li.appendChild(img);
     const p = document.createElement('p');
     p.classList.add('social__text');
     p.textContent = objects[id].comments[i].message;
     li.appendChild(p);
-    fragment.appendChild(li);
+    fragment.append(li);
   }
   commentContainer.innerHTML = '';
-  commentContainer.appendChild(fragment);
+  commentContainer.append(fragment);
 };
 
-export {renderComments}; // clearComments еще сделать
+export {renderComments};
