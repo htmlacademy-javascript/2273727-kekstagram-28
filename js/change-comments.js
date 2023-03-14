@@ -9,28 +9,26 @@ function onLoaderClick () {
     commentsVisibleLength = 5;
   }
 
-  document.querySelector('.big-picture').querySelector('.visible-comments-count').textContent = commentsVisibleLength;
   const commentsHiddenLength = commentContainer.getElementsByClassName('hidden').length;
 
   if (commentsHiddenLength > 5) {
-    for (let i = 0; i <= commentsVisibleLength - 1 + 5; i++) {
+    for (let i = 0; i <= commentsLength - commentsHiddenLength - 1 + 5; i++) {
       commentContainer.children[i].classList.remove('hidden');
     }
-    commentsVisibleLength += 5;
+    commentsVisibleLength += 5; // в области функции после достижения 10 комментов визибл ленгс опять становится равным 5
     document.querySelector('.big-picture').querySelector('.visible-comments-count').textContent = commentsVisibleLength;
     if (commentsVisibleLength >= commentsLength) {
       commentsLoader.classList.add('hidden');
     }
-  }
-
-  if (commentsHiddenLength <= 5) {
-    for (let i = 0; i <= commentsVisibleLength + commentsHiddenLength - 1; i++) {
+  } else {
+    for (let i = 0; i <= commentsLength - 1; i++) {
       commentContainer.children[i].classList.remove('hidden');
     }
     commentsVisibleLength += commentsHiddenLength;
     commentsLoader.classList.add('hidden');
     document.querySelector('.big-picture').querySelector('.visible-comments-count').textContent = commentsVisibleLength;
   }
+
 }
 
 export {onLoaderClick};

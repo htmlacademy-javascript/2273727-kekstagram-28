@@ -14,22 +14,20 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.big-picture__img').querySelector('img').src = objects[id].url;
     bigPicture.querySelector('.big-picture__img').querySelector('img').alt = objects[id].description;
     bigPicture.querySelector('.social__caption').textContent = objects[id].description;
-    bigPicture.querySelector('.social__likes').textContent = objects[id].likes;
+    bigPicture.querySelector('.likes-count').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
 
     const commentContainer = document.querySelector('.social__comments');
     const commentsLength = commentContainer.children.length;
     const commentsLoader = document.querySelector('.big-picture').querySelector('.comments-loader');
-    const checkLoaderStatus = () => {
-      if (commentsLength <= 5) {
-        commentsLoader.classList.add('hidden');
-      } else {
-        commentsLoader.classList.remove('hidden');
-      }
-    };
 
-    checkLoaderStatus();
+    if (commentsLength <= 5) {
+      commentsLoader.classList.add('hidden');
+    } else {
+      commentsLoader.classList.remove('hidden');
+    }
+
     let commentsVisibleLength = commentsLength;
     if (commentsLength > 5) {
       commentsVisibleLength = 5;
