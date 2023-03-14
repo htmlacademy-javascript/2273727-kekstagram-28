@@ -22,14 +22,6 @@ function onMiniatureClick (evt) {
     const commentsLength = commentContainer.children.length;
     bigPicture.querySelector('.visible-comments-count').textContent = commentsLength;
 
-    // if (commentContainer.children.length >= 5) {
-    //   for (let i = 5; i >= commentContainer.children.length; i++) {
-    //     commentContainer.children[i].classList.add('hidden');
-    //   }
-    // }
-
-
-// по идее функция должна снимать класс hidden у +5 элементов при клике и проверять, остались ли еще hidden элементы. Если не остались, то добавлять хидден уже самой кнопке
     const commentsLoader = bigPicture.querySelector('.comments-loader');
     const checkLoaderStatus = () => {
       if (commentsLength <= 5) {
@@ -38,24 +30,49 @@ function onMiniatureClick (evt) {
         commentsLoader.classList.remove('hidden');
       }
     };
+
     checkLoaderStatus();
 
-    function onLoaderClick () {
-      let commentsVisibleLength = commentsLength; // возможно первые значения стоит убрать потому что КНОПКУ видно ТОЛЬКО тогда когда комментов больше 5
-      let commentsHiddenLength = 0;
+
+    function showComments () {
+      console.log('длина комментов' + commentsLength)
+      let commentsVisibleLength = commentsLength;
       if (commentsLength > 5) {
         commentsVisibleLength = 5;
-        commentsHiddenLength = commentsLength - commentsVisibleLength;
+      }
+      console.log('отображаемых сообщений: ' + commentsVisibleLength)
+      let commentsHiddenLength = commentsLength - commentsVisibleLength;
+      console.log('спрятанных сообщений: ' + commentsHiddenLength)
+
+      if (commentsHiddenLength <= 5) {
+        return function () {
+          for (let i = 0; i <= commentsVisibleLength + commentsHiddenLength - 1; i++) {
+            commentContainer.children[i].classList.remove('hidden');
+
+          }
+
+
+        };
+
       }
 
-      for (let i = commentsVisibleLength; i <= commentsLength - 1; i++) {
+      if (commentsHiddenLength > 5) { // другой случай если остаток больше 5
+        // counter = Math.floor(commentsHiddenLength / 5);
+        // commentsHiddenLength = commentsHiddenLength % 5;
+        return function () {
+          for (let i = 0; i <= commentsVisibleLength - 1 + 5; i++) {
+            commentContainer.children[i].classList.remove('hidden');
+          }
+          commentsVisibleLength += 5;
+          return commentsVisibleLength;
 
-        commentContainer.children[i].classList.remove('hidden');
-      // commentsVisibleLength += 5;
+        };
       }
-      console.log('Длина теперь' + commentsLength)
-      checkLoaderStatus();
+
+    // if (commentsHiddenLength === 0) {commentsLoader.classList.add('hidden')} // почему не работает???????? В ЦЕЛОМ НАДО ПОНЯТЬ КАК ФУНКЦИИ СОХРАНЯТЬ ДАННЫЕ МЕЖДУ ИТЕРАЦИЯМИ
     }
+
+    const onLoaderClick = showComments();
 
     commentsLoader.addEventListener('click', onLoaderClick);
 
@@ -68,6 +85,7 @@ picturesContainer.addEventListener('click', onMiniatureClick);
 function onCloseClick () {
   bigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
+  // bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
 }
 
 bigPicture.querySelector('.big-picture__cancel').addEventListener('click', onCloseClick);
@@ -77,6 +95,7 @@ const isEscKeydown = (evt) => evt.key === 'Escape';
 document.addEventListener('keydown', () => {
   if (isEscKeydown) {
     bigPicture.classList.add('hidden');
+    // bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
     document.querySelector('body').classList.remove('modal-open');
   }
 });
