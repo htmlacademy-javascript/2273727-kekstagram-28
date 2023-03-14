@@ -2,7 +2,7 @@
 
 import {objects, picturesContainer} from './rendering-mini.js';
 import {renderComments} from './rendering-comments.js';
-import {changeComments} from './change-comments.js';
+import {onLoaderClick} from './change-comments.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
@@ -17,7 +17,26 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.social__likes').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
-    changeComments();
+
+    const commentContainer = document.querySelector('.social__comments');
+    const commentsLength = commentContainer.children.length;
+    const commentsLoader = document.querySelector('.big-picture').querySelector('.comments-loader');
+    const checkLoaderStatus = () => {
+      if (commentsLength <= 5) {
+        commentsLoader.classList.add('hidden');
+      } else {
+        commentsLoader.classList.remove('hidden');
+      }
+    };
+
+    checkLoaderStatus();
+    let commentsVisibleLength = commentsLength;
+    if (commentsLength > 5) {
+      commentsVisibleLength = 5;
+    }
+
+    bigPicture.querySelector('.visible-comments-count').textContent = commentsVisibleLength;
+    commentsLoader.addEventListener('click', onLoaderClick);
     document.querySelector('body').classList.add('modal-open');
   }
 }
@@ -27,7 +46,7 @@ picturesContainer.addEventListener('click', onMiniatureClick);
 function onCloseClick () {
   bigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
-  // bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
+  bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
 }
 
 bigPicture.querySelector('.big-picture__cancel').addEventListener('click', onCloseClick);
@@ -37,7 +56,7 @@ const isEscKeydown = (evt) => evt.key === 'Escape';
 document.addEventListener('keydown', () => {
   if (isEscKeydown) {
     bigPicture.classList.add('hidden');
-    // bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
+    bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
     document.querySelector('body').classList.remove('modal-open');
   }
 });
