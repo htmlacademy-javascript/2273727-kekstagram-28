@@ -2,7 +2,7 @@
 
 import {objects, picturesContainer} from './rendering-mini.js';
 import {renderComments} from './rendering-comments.js';
-import {createComments} from './create-comments.js';
+import {changeComments} from './change-comments.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
@@ -17,7 +17,7 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.social__likes').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
-    createComments();
+    changeComments();
     document.querySelector('body').classList.add('modal-open');
   }
 }
