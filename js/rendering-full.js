@@ -18,9 +18,9 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
 
-    const commentContainer = document.querySelector('.social__comments');
+    const commentContainer = bigPicture.querySelector('.social__comments');
     const commentsLength = commentContainer.children.length;
-    const commentsLoader = document.querySelector('.big-picture').querySelector('.comments-loader');
+    const commentsLoader = bigPicture.querySelector('.comments-loader');
 
     if (commentsLength <= 5) {
       commentsLoader.classList.add('hidden');
@@ -28,12 +28,8 @@ function onMiniatureClick (evt) {
       commentsLoader.classList.remove('hidden');
     }
 
-    let commentsVisibleLength = commentsLength;
-    if (commentsLength > 5) {
-      commentsVisibleLength = 5;
-    }
+    bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > 5) ? 5 : commentsLength;
 
-    bigPicture.querySelector('.visible-comments-count').textContent = commentsVisibleLength;
     commentsLoader.addEventListener('click', onLoaderClick);
     document.querySelector('body').classList.add('modal-open');
   }
