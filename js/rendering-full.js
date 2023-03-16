@@ -21,13 +21,7 @@ function onMiniatureClick (evt) {
     const commentContainer = bigPicture.querySelector('.social__comments');
     const commentsLength = commentContainer.children.length;
     const commentsLoader = bigPicture.querySelector('.comments-loader');
-
-    if (commentsLength <= 5) {
-      commentsLoader.classList.add('hidden');
-    } else {
-      commentsLoader.classList.remove('hidden');
-    }
-
+    commentsLoader.classList.toggle('hidden', commentsLength <= 5);
     bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > 5) ? 5 : commentsLength;
 
     commentsLoader.addEventListener('click', onLoaderClick);
