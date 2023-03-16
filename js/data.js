@@ -3,7 +3,7 @@
 import {getRandomInteger, getUniqueRandomInteger} from './util.js';
 
 const NUMBER_OF_OBJECTS = 25;
-const MAX_COMMENTS = 6;
+const MAX_COMMENTS = 26;
 
 const DESCRIPTIONS = [
   'Вот так вот',

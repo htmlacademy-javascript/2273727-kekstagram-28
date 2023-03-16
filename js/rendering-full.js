@@ -2,6 +2,7 @@
 
 import {objects, picturesContainer} from './rendering-mini.js';
 import {renderComments} from './rendering-comments.js';
+import {onLoaderClick} from './change-comments.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
@@ -13,13 +14,17 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.big-picture__img').querySelector('img').src = objects[id].url;
     bigPicture.querySelector('.big-picture__img').querySelector('img').alt = objects[id].description;
     bigPicture.querySelector('.social__caption').textContent = objects[id].description;
-    bigPicture.querySelector('.social__likes').textContent = objects[id].likes;
+    bigPicture.querySelector('.likes-count').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id);
 
-    bigPicture.querySelector('.social__comment-count').classList.add('hidden'); // работа для следующей ДЗ
-    bigPicture.querySelector('.comments-loader').classList.add('hidden'); // работа для следующей ДЗ
+    const commentContainer = bigPicture.querySelector('.social__comments');
+    const commentsLength = commentContainer.children.length;
+    const commentsLoader = bigPicture.querySelector('.comments-loader');
+    commentsLoader.classList.toggle('hidden', commentsLength <= 5);
+    bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > 5) ? 5 : commentsLength;
 
+    commentsLoader.addEventListener('click', onLoaderClick);
     document.querySelector('body').classList.add('modal-open');
   }
 }
@@ -29,6 +34,7 @@ picturesContainer.addEventListener('click', onMiniatureClick);
 function onCloseClick () {
   bigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
+  bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
 }
 
 bigPicture.querySelector('.big-picture__cancel').addEventListener('click', onCloseClick);
@@ -38,6 +44,7 @@ const isEscKeydown = (evt) => evt.key === 'Escape';
 document.addEventListener('keydown', () => {
   if (isEscKeydown) {
     bigPicture.classList.add('hidden');
+    bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
     document.querySelector('body').classList.remove('modal-open');
   }
 });
