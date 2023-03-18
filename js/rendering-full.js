@@ -40,10 +40,8 @@ function onCloseClick () {
 
 bigPicture.querySelector('.big-picture__cancel').addEventListener('click', onCloseClick);
 
-const isEscKeydown = (evt) => evt.key === 'Escape';
-
-document.addEventListener('keydown', () => {
-  if (isEscKeydown) {
+document.addEventListener('keydown', (evt) => {
+  if (isEscKeydown(evt)) {
     bigPicture.classList.add('hidden');
     bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
     document.querySelector('body').classList.remove('modal-open');
