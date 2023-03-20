@@ -90,9 +90,105 @@ inputText.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
 
+// логика работы масштабирования фото - НАЧИНАЯ ОТСЮДА ПЕРЕНЕСТИ ВСЕ В REDACTOR.JS
+
+const smallerScaleButton = uploadForm.querySelector('.scale__control--smaller');
+const biggerScaleButton = uploadForm.querySelector('.scale__control--bigger');
+let scaleControlInputValue = 100;
+const previewImage = document.querySelector('.img-upload__preview img');
+
+const updateButtonStatus = () => {
+  smallerScaleButton.disabled = scaleControlInputValue <= 25;
+  biggerScaleButton.disabled = scaleControlInputValue >= 100;
+};
+updateButtonStatus();
+
+smallerScaleButton.addEventListener('click', () => {
+  scaleControlInputValue -= 25;
+  uploadForm.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
+  previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
+  updateButtonStatus();
+});
+
+biggerScaleButton.addEventListener('click', () => {
+  scaleControlInputValue += 25;
+  uploadForm.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
+  previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
+  updateButtonStatus();
+});
+
+// похоже надо навесить обработчики событий на фильтры, чтобы при клике создавался слайдер. при клике на фильтр "оригинал" слайдер уничтожается.
+
+const sliderElement = document.querySelector('.effect-level__slider');
+const valueElement = document.querySelector('.effect-level__value');
+
+noUiSlider.create(sliderElement, {
+  range: {
+    min: 0,
+    max: 1,
+  },
+  start: 1,
+  step: 0.1,
+  connect: 'lower',
+});
+
+sliderElement.noUiSlider.on('update', () => {
+  valueElement.value = parseFloat(sliderElement.noUiSlider.get());
+  console.log(document.querySelector('.effect-level__value').value);
+});
+
+
+
+// выбор эффекта
+
+const effectsContainer = document.querySelector('.effects__list');
+
+function onEffectCheck (evt) {
+  const effectName = evt.target.closest('.effects__item').querySelector('.effects__radio').value;
+  if (evt.target.closest('.effects__item')) {
+    previewImage.className = '';
+    sliderElement.classList.toggle('hidden', effectName === 'none');
+    if (effectName === 'none') {
+      return;
+    }
+    previewImage.classList.add(`effects__preview--${evt.target.closest('.effects__item').querySelector('.effects__radio').value}`);
+
+    if (effectName === 'marvin') {
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 1,
+          max: 100,
+        },
+        start: 20,
+        step: 1,
+      });
+    }
+
+  }
+}
+
+effectsContainer.addEventListener('change', onEffectCheck);
+
+
+
+
+
+
+
+
+
+
 // открытие формы
 function onUploadButtonChange () {
-  uploadOverlay.classList.remove('hidden');
+  sliderElement.classList.add('hidden'); // нужно, чтобы по умолчанию у "оригинал" не было слайдера при переоткрытиях
+  uploadOverlay.classList.remove('hidden'); // собственно отображение формы загрузки
+  previewImage.className = ''; // нужно, чтобы все эффекты сбрасывались при переоткрытии
+  // этот код чтобы сбрасывался масштаб изображения
+  scaleControlInputValue = 100;
+  uploadForm.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
+  previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
+  updateButtonStatus();
+
   document.querySelector('body').classList.add('modal-open');
   // место под обработчики событий
 }
@@ -115,50 +211,4 @@ document.addEventListener('keydown', (evt) => {
     document.querySelector('body').classList.remove('modal-open');
   }
 });
-
-
-// логика работы масштабирования фото - НАЧИНАЯ ОТСЮДА ПЕРЕНЕСТИ ВСЕ В REDACTOR.JS
-
-const smallerScaleButton = uploadForm.querySelector('.scale__control--smaller');
-const biggerScaleButton = uploadForm.querySelector('.scale__control--bigger');
-let scaleControlInputValue = uploadForm.querySelector('.scale__control--value').value;
-const previewImage = document.querySelector('.img-upload__preview img');
-
-const updateButtonStatus = () => {
-  smallerScaleButton.disabled = parseFloat(scaleControlInputValue) <= 25;
-  biggerScaleButton.disabled = parseFloat(scaleControlInputValue) >= 100;
-};
-updateButtonStatus();
-
-smallerScaleButton.addEventListener('click', () => {
-  scaleControlInputValue = `${parseFloat(scaleControlInputValue) - 25}%`;
-  uploadForm.querySelector('.scale__control--value').value = scaleControlInputValue;
-  previewImage.style.transform = `scale(${scaleControlInputValue})`;
-  updateButtonStatus();
-});
-
-biggerScaleButton.addEventListener('click', () => {
-  scaleControlInputValue = `${parseFloat(scaleControlInputValue) + 25}%`;
-  uploadForm.querySelector('.scale__control--value').value = scaleControlInputValue;
-  previewImage.style.transform = `scale(${scaleControlInputValue})`;
-  updateButtonStatus();
-});
-
-// выбор эффекта
-
-const effectsContainer = document.querySelector('.effects__list');
-
-function onEffectCheck (evt) {
-  if (evt.target.closest('.effects__item')) {
-    previewImage.className = '';
-    if (evt.target.closest('.effects__item').querySelector('.effects__radio').value === 'none') {
-      return;
-    }
-    previewImage.classList.add(`effects__preview--${evt.target.closest('.effects__item').querySelector('.effects__radio').value}`);
-  }
-}
-
-effectsContainer.addEventListener('change', onEffectCheck);
-
-// похоже надо навесить обработчики событий на фильтры, чтобы при клике создавался слайдер. при клике на фильтр "оригинал" слайдер уничтожается.
 
