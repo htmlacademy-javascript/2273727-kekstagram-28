@@ -115,3 +115,50 @@ document.addEventListener('keydown', (evt) => {
     document.querySelector('body').classList.remove('modal-open');
   }
 });
+
+
+// логика работы масштабирования фото - НАЧИНАЯ ОТСЮДА ПЕРЕНЕСТИ ВСЕ В REDACTOR.JS
+
+const smallerScaleButton = uploadForm.querySelector('.scale__control--smaller');
+const biggerScaleButton = uploadForm.querySelector('.scale__control--bigger');
+let scaleControlInputValue = uploadForm.querySelector('.scale__control--value').value;
+const previewImage = document.querySelector('.img-upload__preview img');
+
+const updateButtonStatus = () => {
+  smallerScaleButton.disabled = parseFloat(scaleControlInputValue) <= 25;
+  biggerScaleButton.disabled = parseFloat(scaleControlInputValue) >= 100;
+};
+updateButtonStatus();
+
+smallerScaleButton.addEventListener('click', () => {
+  scaleControlInputValue = `${parseFloat(scaleControlInputValue) - 25}%`;
+  uploadForm.querySelector('.scale__control--value').value = scaleControlInputValue;
+  previewImage.style.transform = `scale(${scaleControlInputValue})`;
+  updateButtonStatus();
+});
+
+biggerScaleButton.addEventListener('click', () => {
+  scaleControlInputValue = `${parseFloat(scaleControlInputValue) + 25}%`;
+  uploadForm.querySelector('.scale__control--value').value = scaleControlInputValue;
+  previewImage.style.transform = `scale(${scaleControlInputValue})`;
+  updateButtonStatus();
+});
+
+// выбор эффекта
+
+const effectsContainer = document.querySelector('.effects__list');
+
+function onEffectCheck (evt) {
+  if (evt.target.closest('.effects__item')) {
+    previewImage.className = '';
+    if (evt.target.closest('.effects__item').querySelector('.effects__radio').value === 'none') {
+      return;
+    }
+    previewImage.classList.add(`effects__preview--${evt.target.closest('.effects__item').querySelector('.effects__radio').value}`);
+  }
+}
+
+effectsContainer.addEventListener('change', onEffectCheck);
+
+// похоже надо навесить обработчики событий на фильтры, чтобы при клике создавался слайдер. при клике на фильтр "оригинал" слайдер уничтожается.
+
