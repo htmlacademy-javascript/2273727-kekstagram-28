@@ -1,4 +1,4 @@
-// модуль под логику загрузки фото
+// модуль под логику загрузки и валидации фото
 
 import { isEscKeydown } from './util.js';
 
@@ -62,16 +62,12 @@ pristine.addValidator(inputHashtags, validateHashtagsByLength, 'Количест
 
 inputHashtags.addEventListener('keyup', () => {
   pristine.validate();
-  if (!pristine.validate()) {
-    submitButton.disabled = true;
-  } else {
-    submitButton.disabled = false;
-  }
+  submitButton.disabled = (!pristine.validate());
 });
 
 // валидация текста
 function validateText (value) {
-  submitButton.disabled = (value.length > 140);
+
   return value.length <= 140;
 }
 
@@ -79,6 +75,7 @@ pristine.addValidator(inputText, validateText, 'Максимальная дли�
 
 inputText.addEventListener('keyup', () => {
   pristine.validate();
+  submitButton.disabled = (!pristine.validate());
 });
 
 // здесь убирается нажатие Escape при фокусе в инпуте
@@ -94,7 +91,6 @@ inputText.addEventListener('keydown', (evt) => {
 function onUploadButtonChange () {
   uploadOverlay.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
-  // место под обработчики событий
 }
 uploadButton.addEventListener('change', onUploadButtonChange);
 
@@ -103,7 +99,6 @@ uploadButton.addEventListener('change', onUploadButtonChange);
 function onFormCloseButtonClick () {
   uploadOverlay.classList.add('hidden');
   uploadButton.value = '';
-  // здесь удаляются все обработчики событий внутри формы ЕСЛИ они создаются при открытии формы
 }
 formCloseButton.addEventListener('click', onFormCloseButtonClick);
 
@@ -111,7 +106,6 @@ document.addEventListener('keydown', (evt) => {
   if (isEscKeydown(evt)) {
     uploadOverlay.classList.add('hidden');
     uploadButton.value = '';
-    // здесь удаляются все обработчики событий внутри формы ЕСЛИ они создаются при открытии формы
     document.querySelector('body').classList.remove('modal-open');
   }
 });
