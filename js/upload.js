@@ -132,91 +132,80 @@ noUiSlider.create(sliderElement, {
   connect: 'lower',
 });
 
-sliderElement.noUiSlider.on('update', () => {
+const applyFilter = (effectName) => {
   const intensity = parseFloat(sliderElement.noUiSlider.get());
   valueElement.value = intensity;
-  const effectName = document.querySelector('.effects__item input:checked').value;
-  if (effectName === 'chrome') {
-    previewImage.style.filter = `grayscale(${intensity})`;
-  } else if (effectName === 'sepia') {
-    previewImage.style.filter = `sepia(${intensity})`;
-  } else if (effectName === 'marvin') {
-    previewImage.style.filter = `invert(${intensity}%)`;
-  } else if (effectName === 'phobos') {
-    previewImage.style.filter = `blur(${intensity}px)`;
-  } else if (effectName === 'heat') {
-    previewImage.style.filter = `brightness(${intensity})`;
+  switch(effectName) {
+    case 'chrome':
+      previewImage.style.filter = `grayscale(${intensity})`;
+      break;
+    case 'sepia':
+      previewImage.style.filter = `sepia(${intensity})`;
+      break;
+    case 'marvin':
+      previewImage.style.filter = `invert(${intensity}%)`;
+      break;
+    case 'phobos':
+      previewImage.style.filter = `blur(${intensity}px)`;
+      break;
+    case 'heat':
+      previewImage.style.filter = `brightness(${intensity})`;
+      break;
+    default:
+      previewImage.style.filter = '';
   }
+};
+
+sliderElement.noUiSlider.on('update', () => {
+  const effectName = document.querySelector('.effects__item input:checked').value;
+  applyFilter(effectName);
 });
 
 // выбор эффекта
 
 const effectsContainer = document.querySelector('.effects__list');
 
+const updateSliderOptions = (rangeMin, rangeMax, startValue, stepValue) => {
+  sliderElement.noUiSlider.updateOptions({
+    range: {
+      min: rangeMin,
+      max: rangeMax,
+    },
+    start: startValue,
+    step: stepValue,
+  });
+};
+
+const applyEffectSettings = (effectName) => {
+  switch(effectName) {
+    case 'chrome':
+      updateSliderOptions(0, 1, 1, 0.1);
+      break;
+    case 'sepia':
+      updateSliderOptions(0, 1, 1, 0.1);
+      break;
+    case 'marvin':
+      updateSliderOptions(0, 100, 100, 1);
+      break;
+    case 'phobos':
+      updateSliderOptions(0, 3, 3, 0.1);
+      break;
+    case 'heat':
+      updateSliderOptions(1, 3, 3, 0.1);
+      break;
+    default:
+      previewImage.style.filter = '';
+      break;
+  }
+};
+
 function onEffectCheck (evt) {
   const effectName = evt.target.closest('.effects__item').querySelector('.effects__radio').value;
   if (evt.target.closest('.effects__item')) {
     previewImage.className = '';
     sliderElement.classList.toggle('hidden', effectName === 'none');
-    if (effectName === 'none') {
-      previewImage.style.filter = '';
-      return;
-    }
     previewImage.classList.add(`effects__preview--${effectName}`);
-    if (effectName === 'chrome') {
-      sliderElement.noUiSlider.updateOptions({
-        range: {
-          min: 0,
-          max: 1,
-        },
-        start: 1,
-        step: 0.1,
-      });
-    }
-
-    if (effectName === 'sepia') {
-      sliderElement.noUiSlider.updateOptions({
-        range: {
-          min: 0,
-          max: 1,
-        },
-        start: 1,
-        step: 0.1,
-      });
-    }
-
-    if (effectName === 'marvin') {
-      sliderElement.noUiSlider.updateOptions({
-        range: {
-          min: 0,
-          max: 100,
-        },
-        start: 100,
-        step: 1,
-      });
-    }
-
-    if (effectName === 'phobos') {
-      sliderElement.noUiSlider.updateOptions({
-        range: {
-          min: 0,
-          max: 3,
-        },
-        start: 3,
-        step: 0.1,
-      });
-    }
-
-    if (effectName === 'heat') {
-      sliderElement.noUiSlider.updateOptions({
-        range: {
-          min: 1,
-          max: 3,
-        },
-        start: 3,
-        step: 0.1,
-      });
-    }
+    applyEffectSettings(effectName);
   }
 }
 
@@ -235,7 +224,6 @@ function onUploadButtonChange () {
   updateButtonStatus();
 
   document.querySelector('body').classList.add('modal-open');
-  // место под обработчики событий
 }
 uploadButton.addEventListener('change', onUploadButtonChange);
 
@@ -244,7 +232,6 @@ uploadButton.addEventListener('change', onUploadButtonChange);
 function onFormCloseButtonClick () {
   uploadOverlay.classList.add('hidden');
   uploadButton.value = '';
-  // здесь удаляются все обработчики событий внутри формы ЕСЛИ они создаются при открытии формы
 }
 formCloseButton.addEventListener('click', onFormCloseButtonClick);
 
@@ -252,7 +239,6 @@ document.addEventListener('keydown', (evt) => {
   if (isEscKeydown(evt)) {
     uploadOverlay.classList.add('hidden');
     uploadButton.value = '';
-    // здесь удаляются все обработчики событий внутри формы ЕСЛИ они создаются при открытии формы
     document.querySelector('body').classList.remove('modal-open');
   }
 });
