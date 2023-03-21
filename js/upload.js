@@ -62,16 +62,12 @@ pristine.addValidator(inputHashtags, validateHashtagsByLength, 'Количест
 
 inputHashtags.addEventListener('keyup', () => {
   pristine.validate();
-  if (!pristine.validate()) {
-    submitButton.disabled = true;
-  } else {
-    submitButton.disabled = false;
-  }
+  submitButton.disabled = (!pristine.validate());
 });
 
 // валидация текста
 function validateText (value) {
-  submitButton.disabled = (value.length > 140);
+
   return value.length <= 140;
 }
 
@@ -79,6 +75,7 @@ pristine.addValidator(inputText, validateText, 'Максимальная дли�
 
 inputText.addEventListener('keyup', () => {
   pristine.validate();
+  submitButton.disabled = (!pristine.validate());
 });
 
 // здесь убирается нажатие Escape при фокусе в инпуте
