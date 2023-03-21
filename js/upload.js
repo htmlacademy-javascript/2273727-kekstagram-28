@@ -1,4 +1,4 @@
-// модуль под логику загрузки фото
+// модуль под логику загрузки и редактирования фото
 
 import { isEscKeydown } from './util.js';
 
@@ -90,7 +90,7 @@ inputText.addEventListener('keydown', (evt) => {
   evt.stopPropagation();
 });
 
-// логика работы масштабирования фото - НАЧИНАЯ ОТСЮДА ПЕРЕНЕСТИ ВСЕ В REDACTOR.JS
+// логика работы масштабирования фото
 
 const smallerScaleButton = uploadForm.querySelector('.scale__control--smaller');
 const biggerScaleButton = uploadForm.querySelector('.scale__control--bigger');
@@ -117,7 +117,7 @@ biggerScaleButton.addEventListener('click', () => {
   updateButtonStatus();
 });
 
-// похоже надо навесить обработчики событий на фильтры, чтобы при клике создавался слайдер. при клике на фильтр "оригинал" слайдер уничтожается.
+// создание слайдера
 
 const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
@@ -133,11 +133,21 @@ noUiSlider.create(sliderElement, {
 });
 
 sliderElement.noUiSlider.on('update', () => {
-  valueElement.value = parseFloat(sliderElement.noUiSlider.get());
-  console.log(document.querySelector('.effect-level__value').value);
+  const intensity = parseFloat(sliderElement.noUiSlider.get());
+  valueElement.value = intensity;
+  const effectName = document.querySelector('.effects__item input:checked').value;
+  if (effectName === 'chrome') {
+    previewImage.style.filter = `grayscale(${intensity})`;
+  } else if (effectName === 'sepia') {
+    previewImage.style.filter = `sepia(${intensity})`;
+  } else if (effectName === 'marvin') {
+    previewImage.style.filter = `invert(${intensity}%)`;
+  } else if (effectName === 'phobos') {
+    previewImage.style.filter = `blur(${intensity}px)`;
+  } else if (effectName === 'heat') {
+    previewImage.style.filter = `brightness(${intensity})`;
+  }
 });
-
-
 
 // выбор эффекта
 
@@ -149,40 +159,75 @@ function onEffectCheck (evt) {
     previewImage.className = '';
     sliderElement.classList.toggle('hidden', effectName === 'none');
     if (effectName === 'none') {
+      previewImage.style.filter = '';
       return;
     }
-    previewImage.classList.add(`effects__preview--${evt.target.closest('.effects__item').querySelector('.effects__radio').value}`);
+    previewImage.classList.add(`effects__preview--${effectName}`);
+    if (effectName === 'chrome') {
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 1,
+        },
+        start: 1,
+        step: 0.1,
+      });
+    }
+
+    if (effectName === 'sepia') {
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 1,
+        },
+        start: 1,
+        step: 0.1,
+      });
+    }
 
     if (effectName === 'marvin') {
       sliderElement.noUiSlider.updateOptions({
         range: {
-          min: 1,
+          min: 0,
           max: 100,
         },
-        start: 20,
+        start: 100,
         step: 1,
       });
     }
 
+    if (effectName === 'phobos') {
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 0,
+          max: 3,
+        },
+        start: 3,
+        step: 0.1,
+      });
+    }
+
+    if (effectName === 'heat') {
+      sliderElement.noUiSlider.updateOptions({
+        range: {
+          min: 1,
+          max: 3,
+        },
+        start: 3,
+        step: 0.1,
+      });
+    }
   }
 }
 
 effectsContainer.addEventListener('change', onEffectCheck);
-
-
-
-
-
-
-
-
-
 
 // открытие формы
 function onUploadButtonChange () {
   sliderElement.classList.add('hidden'); // нужно, чтобы по умолчанию у "оригинал" не было слайдера при переоткрытиях
   uploadOverlay.classList.remove('hidden'); // собственно отображение формы загрузки
   previewImage.className = ''; // нужно, чтобы все эффекты сбрасывались при переоткрытии
+  previewImage.style.filter = ''; // чтобы сбрасывался стиль фото при переоткрытии
   // этот код чтобы сбрасывался масштаб изображения
   scaleControlInputValue = 100;
   uploadForm.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
@@ -211,4 +256,5 @@ document.addEventListener('keydown', (evt) => {
     document.querySelector('body').classList.remove('modal-open');
   }
 });
+
 
