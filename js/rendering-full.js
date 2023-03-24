@@ -1,13 +1,13 @@
 // логика отрисовщика большого фото и комментариев
 
-import { objects, picturesContainer } from './rendering-mini.js';
+import { picturesContainer } from './rendering-mini.js';
 import { renderComments } from './rendering-comments.js';
 import { onLoaderClick } from './change-comments.js';
 import { isEscKeydown } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
-function onMiniatureClick (evt) {
+function onMiniatureClick (evt, objects) {
   if (evt.target.closest('.picture')) {
     evt.preventDefault();
     const id = evt.target.closest('a').dataset.id;
@@ -17,7 +17,7 @@ function onMiniatureClick (evt) {
     bigPicture.querySelector('.social__caption').textContent = objects[id].description;
     bigPicture.querySelector('.likes-count').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
-    renderComments(id);
+    renderComments(id, objects);
 
     const commentContainer = bigPicture.querySelector('.social__comments');
     const commentsLength = commentContainer.children.length;
@@ -47,3 +47,5 @@ document.addEventListener('keydown', (evt) => {
     document.querySelector('body').classList.remove('modal-open');
   }
 });
+
+export {onMiniatureClick};

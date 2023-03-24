@@ -1,6 +1,13 @@
 // модуль под логику загрузки и валидации фото
 
 import { isEscKeydown } from './util.js';
+import { showAlert } from './util.js';
+import { sendData } from './fetch.js';
+
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
 
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadButton = uploadForm.querySelector('.img-upload__input');
@@ -96,16 +103,39 @@ uploadButton.addEventListener('change', onUploadButtonChange);
 
 
 // закрытие формы
-function onFormCloseButtonClick () {
+function closeForm () {
   uploadOverlay.classList.add('hidden');
   uploadButton.value = '';
+  document.querySelector('body').classList.remove('modal-open');
+  uploadForm.reset();
 }
-formCloseButton.addEventListener('click', onFormCloseButtonClick);
+formCloseButton.addEventListener('click', closeForm);
 
 document.addEventListener('keydown', (evt) => {
   if (isEscKeydown(evt)) {
-    uploadOverlay.classList.add('hidden');
-    uploadButton.value = '';
-    document.querySelector('body').classList.remove('modal-open');
+    closeForm();
   }
 });
+
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
+const setFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    blockSubmitButton();
+    sendData(new FormData(evt.target), onSuccess)
+      .catch((err) => {
+        showAlert(err.message);
+      }).finally(unblockSubmitButton);
+  });
+};
+
+export { closeForm, setFormSubmit };

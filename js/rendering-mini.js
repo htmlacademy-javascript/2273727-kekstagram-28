@@ -1,10 +1,8 @@
 // логика отрисовщика миниатюр фото
 
-import {createObjects} from './data.js';
-
 const picturesContainer = document.querySelector('.pictures');
-const objects = createObjects();
-const renderPhotos = () => {
+
+const renderPhotos = (objects) => {
   const fragment = document.createDocumentFragment();
   const pictureTemplate = document.querySelector('#picture').content;
 
@@ -21,6 +19,4 @@ const renderPhotos = () => {
   picturesContainer.append(fragment);
 };
 
-renderPhotos();
-
-export {objects, picturesContainer};
+export {renderPhotos, picturesContainer};

@@ -1,8 +1,6 @@
 // логика рендера комментов
 
-import {objects} from './rendering-mini.js';
-
-const renderComments = (id) => {
+const renderComments = (id, objects) => {
   const fragment = document.createDocumentFragment();
   const commentContainer = document.querySelector('.social__comments');
 
@@ -32,6 +30,3 @@ const renderComments = (id) => {
 };
 
 export {renderComments};
-
-// при нажатии на "загрузить еще" удалять класс hidden у элементов контейнера комментов из диапазона длиной в +5 к текущей длине
-// по идее функция должна снимать класс hidden у +5 элементов при клике и проверять, остались ли еще hidden элементы. Если не остались, то добавлять хидден уже самой кнопке
