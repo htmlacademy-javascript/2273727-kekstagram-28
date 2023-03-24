@@ -131,8 +131,7 @@ const setFormSubmit = (onSuccess) => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
     blockSubmitButton();
-    sendData(new FormData(evt.target))
-      .then(onSuccess)
+    sendData(new FormData(evt.target), onSuccess)
       .catch((err) => {
         showAlert(err.message);
       }).finally(unblockSubmitButton);
