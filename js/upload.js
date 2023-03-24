@@ -4,6 +4,11 @@ import { isEscKeydown } from './util.js';
 import { showAlert } from './util.js';
 import { sendData } from './fetch.js';
 
+const SubmitButtonText = {
+  IDLE: 'Сохранить',
+  SENDING: 'Сохраняю...'
+};
+
 const uploadForm = document.querySelector('.img-upload__form');
 const uploadButton = uploadForm.querySelector('.img-upload__input');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
@@ -112,14 +117,25 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = SubmitButtonText.SENDING;
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = SubmitButtonText.IDLE;
+};
+
 const setFormSubmit = (onSuccess) => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
+    blockSubmitButton();
     sendData(new FormData(evt.target))
       .then(onSuccess)
       .catch((err) => {
         showAlert(err.message);
-      });
+      }).finally(unblockSubmitButton);
   });
 };
 
