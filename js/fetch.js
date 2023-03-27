@@ -73,10 +73,9 @@ const setFilterRandomClick = (objects) => {
   const buttonFilterRandom = filters.querySelector('#filter-random');
   buttonFilterRandom.addEventListener('click', () => {
     const randomObjects = [];
-    const numObjects = objects.length;
+    const randomIndex = getUniqueRandomInteger(0, 24);
     for (let i = 0; i < 10; i++) {
-      const randomIndex = Math.floor(Math.random() * numObjects);
-      randomObjects.push(objects[randomIndex]);
+      randomObjects.push(objects[randomIndex()]);
     }
     renderPhotos(randomObjects);
   });
@@ -100,7 +99,7 @@ const getData = async () => {
     showAlert(ErrorText.GET_DATA);
   }
   const objects = await response.json();
-  renderPhotos(objects);// здесь добавить sliceMethod и sortMethod
+  renderPhotos(objects);
   setFilterDefaultClick(objects);
   setFilterRandomClick(objects);
   setFilterDiscussedClick(objects);

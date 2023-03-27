@@ -21,7 +21,11 @@ const renderPhotos = (objects, sortMethod) => {
       picture.querySelector('.picture__comments').textContent = comments.length;
       fragment.append(picture);
     });
-    // ТУТ НАДО ОЧИЩАТЬ СНАЧАЛА
+
+  const oldPictures = picturesContainer.querySelectorAll('.picture');
+  oldPictures.forEach((picture) => {
+    picture.remove();
+  });
   picturesContainer.append(fragment);
 };
 
