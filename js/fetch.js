@@ -1,7 +1,7 @@
 import { renderPhotos } from './rendering-mini.js';
 import { picturesContainer } from './rendering-mini.js';
 import { onMiniatureClick } from './rendering-full.js';
-import { isEscKeydown, showAlert } from './util.js';
+import { getUniqueRandomInteger, isEscKeydown, showAlert } from './util.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successWindow = successTemplate.cloneNode(true);
@@ -61,6 +61,34 @@ const ErrorText = {
 };
 
 const filters = document.querySelector('.img-filters');
+const compareByDiscussed = (a, b) => b.comments.length - a.comments.length;
+const setFilterDefaultClick = (objects) => {
+  const buttonFilterDefault = filters.querySelector('#filter-default');
+  buttonFilterDefault.addEventListener('click', () => {
+    renderPhotos(objects);
+  });
+};
+
+const setFilterRandomClick = (objects) => {
+  const buttonFilterRandom = filters.querySelector('#filter-random');
+  buttonFilterRandom.addEventListener('click', () => {
+    const randomObjects = [];
+    const numObjects = objects.length;
+    for (let i = 0; i < 10; i++) {
+      const randomIndex = Math.floor(Math.random() * numObjects);
+      randomObjects.push(objects[randomIndex]);
+    }
+    renderPhotos(randomObjects);
+  });
+};
+
+const setFilterDiscussedClick = (objects) => {
+  const buttonFilterDiscussed = filters.querySelector('#filter-discussed');
+  buttonFilterDiscussed.addEventListener('click', () => {
+    renderPhotos(objects, compareByDiscussed);
+  });
+};
+
 const getData = async () => {
   let response;
   try {
@@ -72,11 +100,15 @@ const getData = async () => {
     showAlert(ErrorText.GET_DATA);
   }
   const objects = await response.json();
-  renderPhotos(objects);
+  renderPhotos(objects);// здесь добавить sliceMethod и sortMethod
+  setFilterDefaultClick(objects);
+  setFilterRandomClick(objects);
+  setFilterDiscussedClick(objects);
   picturesContainer.addEventListener('click', (evt) => onMiniatureClick(evt, objects));
   filters.classList.remove('img-filters--inactive');
 };
 
+// отправка данных формы
 const sendData = async (body, onSuccess) => {
   let response;
   try {
@@ -97,4 +129,4 @@ const sendData = async (body, onSuccess) => {
   }
 };
 
-export { getData, sendData };
+export { getData, sendData, setFilterDefaultClick, setFilterDiscussedClick, setFilterRandomClick };

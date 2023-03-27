@@ -2,20 +2,26 @@
 
 const picturesContainer = document.querySelector('.pictures');
 
-const renderPhotos = (objects) => {
+
+
+
+const renderPhotos = (objects, sortMethod) => {
   const fragment = document.createDocumentFragment();
   const pictureTemplate = document.querySelector('#picture').content;
 
-  for (let i = 0; i < objects.length; i++) {
-    const picture = pictureTemplate.cloneNode(true);
-    picture.querySelector('a').dataset.id = objects[i].id;
-    picture.querySelector('.picture__img').src = objects[i].url;
-    picture.querySelector('.picture__img').alt = objects[i].description;
-    picture.querySelector('.picture__likes').textContent = objects[i].likes;
-    picture.querySelector('.picture__comments').textContent = objects[i].comments.length;
-    fragment.append(picture);
-  }
-
+  objects
+    .slice()
+    .sort(sortMethod)
+    .forEach(({id, url, description, likes, comments}) => {
+      const picture = pictureTemplate.cloneNode(true);
+      picture.querySelector('a').dataset.id = id;
+      picture.querySelector('.picture__img').src = url;
+      picture.querySelector('.picture__img').alt = description;
+      picture.querySelector('.picture__likes').textContent = likes;
+      picture.querySelector('.picture__comments').textContent = comments.length;
+      fragment.append(picture);
+    });
+    // ТУТ НАДО ОЧИЩАТЬ СНАЧАЛА
   picturesContainer.append(fragment);
 };
 
