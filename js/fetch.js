@@ -1,7 +1,7 @@
 import { renderPhotos } from './rendering-mini.js';
 import { picturesContainer } from './rendering-mini.js';
 import { onMiniatureClick } from './rendering-full.js';
-import { isEscKeydown } from './util.js';
+import { isEscKeydown, showAlert } from './util.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successWindow = successTemplate.cloneNode(true);
@@ -10,12 +10,12 @@ document.body.append(successWindow);
 
 const showSuccess = () => {
   successWindow.classList.remove('hidden');
-  const closeButton = successWindow.querySelector('.success__button');
+  const closeSuccessButton = successWindow.querySelector('.success__button');
   const successInner = document.querySelector('.success__inner');
   function closeSuccessWindow () {
     successWindow.classList.add('hidden');
   }
-  closeButton.addEventListener('click', closeSuccessWindow);
+  closeSuccessButton.addEventListener('click', closeSuccessWindow);
   document.addEventListener('keydown', (evt) => {
     if (isEscKeydown(evt)) {
       closeSuccessWindow();
@@ -60,38 +60,39 @@ const ErrorText = {
   SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
 };
 
-const getData = () => fetch(
-  'https://28.javascript.pages.academy/kekstagram/data')
-  .then((response) => {
+const getData = async () => {
+  let response;
+  try {
+    response = await fetch('https://28.javascript.pages.academy/kekstagram/data');
     if (!response.ok) {
       throw new Error();
     }
-    return response.json();
-  })
-  .catch(() => {
-    throw new Error(ErrorText.GET_DATA);
-  })
-  .then((objects) => {
-    renderPhotos(objects);
-    picturesContainer.addEventListener('click', (evt) => onMiniatureClick(evt, objects));
-  });
+  } catch {
+    showAlert(ErrorText.GET_DATA);
+  }
+  const objects = await response.json();
+  renderPhotos(objects);
+  picturesContainer.addEventListener('click', (evt) => onMiniatureClick(evt, objects));
+};
 
-const sendData = (body, onSuccess) => fetch(
-  'https://28.javascript.pages.academy/kekstagram',
-  {
-    method: 'POST',
-    body,
-  })
-  .then((response) => {
+const sendData = async (body, onSuccess) => {
+  let response;
+  try {
+    response = await fetch(
+      'https://28.javascript.pages.academy/kekstagram',
+      {
+        method: 'POST',
+        body,
+      });
     if (response.ok) {
       onSuccess();
       showSuccess();
     } else {
       showError();
     }
-  })
-  .catch(() => {
-    throw new Error(ErrorText.SEND_DATA);
-  });
+  } catch {
+    showAlert(ErrorText.SEND_DATA);
+  }
+};
 
 export { getData, sendData };
