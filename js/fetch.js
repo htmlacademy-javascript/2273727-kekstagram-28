@@ -33,24 +33,26 @@ const errorWindow = errorTemplate.cloneNode(true);
 errorWindow.classList.add('hidden');
 document.body.append(errorWindow);
 
+const closeButton = errorWindow.querySelector('.error__button');
+const errorInner = document.querySelector('.error__inner');
+
+function closeErrorWindow () {
+  errorWindow.classList.add('hidden');
+}
+closeButton.addEventListener('click', closeErrorWindow);
+document.addEventListener('keydown', (evt) => {
+  if (isEscKeydown(evt)) {
+    closeErrorWindow();
+  }
+});
+document.addEventListener('click', (evt) => {
+  if (evt.target !== errorInner) {
+    closeErrorWindow();
+  }
+});
+
 const showError = () => {
   errorWindow.classList.remove('hidden');
-  const closeButton = errorWindow.querySelector('.error__button');
-  const errorInner = document.querySelector('.error__inner');
-  function closeErrorWindow () {
-    errorWindow.classList.add('hidden');
-  }
-  closeButton.addEventListener('click', closeErrorWindow);
-  document.addEventListener('keydown', (evt) => {
-    if (isEscKeydown(evt)) {
-      closeErrorWindow();
-    }
-  });
-  document.addEventListener('click', (evt) => {
-    if (evt.target !== errorInner) {
-      closeErrorWindow();
-    }
-  });
 };
 
 const ErrorText = {
