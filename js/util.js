@@ -41,4 +41,12 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export { getRandomInteger, getUniqueRandomInteger, isEscKeydown, showAlert };
+const debounce = (callback, timeoutDelay = 500) => {
+  let timeoutId;
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+};
+
+export { getUniqueRandomInteger, isEscKeydown, showAlert, debounce };
