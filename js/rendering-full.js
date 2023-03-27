@@ -1,6 +1,5 @@
 // логика отрисовщика большого фото и комментариев
 
-import { picturesContainer } from './rendering-mini.js';
 import { renderComments } from './rendering-comments.js';
 import { onLoaderClick } from './change-comments.js';
 import { isEscKeydown } from './util.js';
@@ -12,8 +11,8 @@ function onMiniatureClick (evt, objects) {
     evt.preventDefault();
     const id = evt.target.closest('a').dataset.id;
     bigPicture.classList.remove('hidden');
-    bigPicture.querySelector('.big-picture__img').querySelector('img').src = objects[id].url;
-    bigPicture.querySelector('.big-picture__img').querySelector('img').alt = objects[id].description;
+    bigPicture.querySelector('.big-picture__img img').src = objects[id].url;
+    bigPicture.querySelector('.big-picture__img img').alt = objects[id].description;
     bigPicture.querySelector('.social__caption').textContent = objects[id].description;
     bigPicture.querySelector('.likes-count').textContent = objects[id].likes;
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
@@ -29,8 +28,6 @@ function onMiniatureClick (evt, objects) {
     document.querySelector('body').classList.add('modal-open');
   }
 }
-
-picturesContainer.addEventListener('click', onMiniatureClick);
 
 function onCloseClick () {
   bigPicture.classList.add('hidden');

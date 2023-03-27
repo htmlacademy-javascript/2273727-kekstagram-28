@@ -60,6 +60,7 @@ const ErrorText = {
   SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
 };
 
+const filters = document.querySelector('.img-filters');
 const getData = async () => {
   let response;
   try {
@@ -73,6 +74,7 @@ const getData = async () => {
   const objects = await response.json();
   renderPhotos(objects);
   picturesContainer.addEventListener('click', (evt) => onMiniatureClick(evt, objects));
+  filters.classList.remove('img-filters--inactive');
 };
 
 const sendData = async (body, onSuccess) => {
