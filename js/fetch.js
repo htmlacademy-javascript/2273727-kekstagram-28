@@ -1,7 +1,7 @@
 import { renderPhotos } from './rendering-mini.js';
 import { picturesContainer } from './rendering-mini.js';
 import { onMiniatureClick } from './rendering-full.js';
-import { getUniqueRandomInteger, isEscKeydown, showAlert } from './util.js';
+import { getUniqueRandomInteger, isEscKeydown, showAlert, debounce } from './util.js';
 
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successWindow = successTemplate.cloneNode(true);
@@ -62,30 +62,42 @@ const ErrorText = {
 
 const filters = document.querySelector('.img-filters');
 const compareByDiscussed = (a, b) => b.comments.length - a.comments.length;
+
+const RERENDER_DELAY = 500;
+const buttonFilterDefault = filters.querySelector('#filter-default');
+const buttonFilterRandom = filters.querySelector('#filter-random');
+const buttonFilterDiscussed = filters.querySelector('#filter-discussed');
+
 const setFilterDefaultClick = (objects) => {
-  const buttonFilterDefault = filters.querySelector('#filter-default');
-  buttonFilterDefault.addEventListener('click', () => {
+  buttonFilterDefault.addEventListener('click', debounce(() => {
     renderPhotos(objects);
-  });
+    buttonFilterDefault.classList.toggle('img-filters__button--active'); // пробовал это (и ниже) обернуть в универсальную функцию, но не додумался, как ее сделать)
+    buttonFilterRandom.classList.remove('img-filters__button--active');
+    buttonFilterDiscussed.classList.remove('img-filters__button--active');
+  }, RERENDER_DELAY));
 };
 
 const setFilterRandomClick = (objects) => {
-  const buttonFilterRandom = filters.querySelector('#filter-random');
-  buttonFilterRandom.addEventListener('click', () => {
+  buttonFilterRandom.addEventListener('click', debounce(() => {
     const randomObjects = [];
     const randomIndex = getUniqueRandomInteger(0, 24);
     for (let i = 0; i < 10; i++) {
       randomObjects.push(objects[randomIndex()]);
     }
     renderPhotos(randomObjects);
-  });
+    buttonFilterDefault.classList.remove('img-filters__button--active');
+    buttonFilterRandom.classList.toggle('img-filters__button--active');
+    buttonFilterDiscussed.classList.remove('img-filters__button--active');
+  }, RERENDER_DELAY));
 };
 
 const setFilterDiscussedClick = (objects) => {
-  const buttonFilterDiscussed = filters.querySelector('#filter-discussed');
-  buttonFilterDiscussed.addEventListener('click', () => {
+  buttonFilterDiscussed.addEventListener('click', debounce(() => {
     renderPhotos(objects, compareByDiscussed);
-  });
+    buttonFilterDefault.classList.remove('img-filters__button--active');
+    buttonFilterRandom.classList.remove('img-filters__button--active');
+    buttonFilterDiscussed.classList.toggle('img-filters__button--active');
+  }, RERENDER_DELAY));
 };
 
 const getData = async () => {

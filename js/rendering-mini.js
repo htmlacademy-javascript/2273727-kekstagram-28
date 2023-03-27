@@ -2,9 +2,6 @@
 
 const picturesContainer = document.querySelector('.pictures');
 
-
-
-
 const renderPhotos = (objects, sortMethod) => {
   const fragment = document.createDocumentFragment();
   const pictureTemplate = document.querySelector('#picture').content;
