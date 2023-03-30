@@ -12,20 +12,26 @@ const showSuccess = () => {
   successWindow.classList.remove('hidden');
   const closeSuccessButton = successWindow.querySelector('.success__button');
   const successInner = document.querySelector('.success__inner');
-  function closeSuccessWindow () {
+  const closeSuccessWindow = () => {
     successWindow.classList.add('hidden');
-  }
+  };
+
   closeSuccessButton.addEventListener('click', closeSuccessWindow);
+
   document.addEventListener('keydown', (evt) => {
     if (isEscKeydown(evt)) {
       closeSuccessWindow();
     }
   });
-  document.addEventListener('click', (evt) => {
+
+  const onSuccessButtonClick = (evt) => {
     if (evt.target !== successInner) {
       closeSuccessWindow();
+      document.removeEventListener('click', onSuccessButtonClick);
     }
-  });
+  };
+
+  document.addEventListener('click', onSuccessButtonClick);
 };
 
 const errorTemplate = document.querySelector('#error').content.querySelector('.error');
@@ -33,26 +39,30 @@ const errorWindow = errorTemplate.cloneNode(true);
 errorWindow.classList.add('hidden');
 document.body.append(errorWindow);
 
-const closeButton = errorWindow.querySelector('.error__button');
-const errorInner = document.querySelector('.error__inner');
-
-function closeErrorWindow () {
-  errorWindow.classList.add('hidden');
-}
-closeButton.addEventListener('click', closeErrorWindow);
-document.addEventListener('keydown', (evt) => {
-  if (isEscKeydown(evt)) {
-    closeErrorWindow();
-  }
-});
-document.addEventListener('click', (evt) => {
-  if (evt.target !== errorInner) {
-    closeErrorWindow();
-  }
-});
-
 const showError = () => {
   errorWindow.classList.remove('hidden');
+  const closeErrorButton = errorWindow.querySelector('.error__button');
+  const errorInner = document.querySelector('.error__inner');
+  const closeErrorWindow = () => {
+    errorWindow.classList.add('hidden');
+  };
+
+  closeErrorButton.addEventListener('click', () => errorWindow.classList.add('hidden'));
+
+  document.addEventListener('keydown', (evt) => {
+    if (isEscKeydown(evt)) {
+      closeErrorWindow();
+    }
+  });
+
+  const onErrorButtonClick = (evt) => {
+    if (evt.target !== errorInner) {
+      closeErrorWindow();
+      document.removeEventListener('click', onErrorButtonClick);
+    }
+  };
+
+  document.addEventListener('click', onErrorButtonClick);
 };
 
 const ErrorText = {
@@ -60,20 +70,28 @@ const ErrorText = {
   SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
 };
 
-const filters = document.querySelector('.img-filters');
+const filterList = document.querySelector('.img-filters');
 const compareByDiscussed = (a, b) => b.comments.length - a.comments.length;
+const filterButtons = document.querySelectorAll('.img-filters__button');
+const activeClass = 'img-filters__button--active';
 
 const RERENDER_DELAY = 500;
-const buttonFilterDefault = filters.querySelector('#filter-default');
-const buttonFilterRandom = filters.querySelector('#filter-random');
-const buttonFilterDiscussed = filters.querySelector('#filter-discussed');
+const buttonFilterDefault = filterList.querySelector('#filter-default');
+const buttonFilterRandom = filterList.querySelector('#filter-random');
+const buttonFilterDiscussed = filterList.querySelector('#filter-discussed');
+
+const toggleButtons = (filterId) => filterButtons.forEach((btn) => btn.classList.toggle(activeClass, btn.id === filterId));
+
+filterButtons.forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const btnId = btn.id;
+    toggleButtons(btnId);
+  });
+});
 
 const setFilterDefaultClick = (objects) => {
   buttonFilterDefault.addEventListener('click', debounce(() => {
     renderPhotos(objects);
-    buttonFilterDefault.classList.toggle('img-filters__button--active'); // пробовал это (и ниже) обернуть в универсальную функцию, но не додумался, как ее сделать)
-    buttonFilterRandom.classList.remove('img-filters__button--active');
-    buttonFilterDiscussed.classList.remove('img-filters__button--active');
   }, RERENDER_DELAY));
 };
 
@@ -85,21 +103,16 @@ const setFilterRandomClick = (objects) => {
       randomObjects.push(objects[randomIndex()]);
     }
     renderPhotos(randomObjects);
-    buttonFilterDefault.classList.remove('img-filters__button--active');
-    buttonFilterRandom.classList.toggle('img-filters__button--active');
-    buttonFilterDiscussed.classList.remove('img-filters__button--active');
   }, RERENDER_DELAY));
 };
 
 const setFilterDiscussedClick = (objects) => {
   buttonFilterDiscussed.addEventListener('click', debounce(() => {
     renderPhotos(objects, compareByDiscussed);
-    buttonFilterDefault.classList.remove('img-filters__button--active');
-    buttonFilterRandom.classList.remove('img-filters__button--active');
-    buttonFilterDiscussed.classList.toggle('img-filters__button--active');
   }, RERENDER_DELAY));
 };
 
+// получение данных и отрисовка миниатюр
 const getData = async () => {
   let response;
   try {
@@ -116,7 +129,7 @@ const getData = async () => {
   setFilterRandomClick(objects);
   setFilterDiscussedClick(objects);
   picturesContainer.addEventListener('click', (evt) => onMiniatureClick(evt, objects));
-  filters.classList.remove('img-filters--inactive');
+  filterList.classList.remove('img-filters--inactive');
 };
 
 // отправка данных формы
@@ -140,4 +153,4 @@ const sendData = async (body, onSuccess) => {
   }
 };
 
-export { getData, sendData, setFilterDefaultClick, setFilterDiscussedClick, setFilterRandomClick };
+export { errorWindow, getData, sendData, setFilterDefaultClick, setFilterDiscussedClick, setFilterRandomClick };

@@ -3,6 +3,7 @@
 import { isEscKeydown } from './util.js';
 import { showAlert } from './util.js';
 import { sendData } from './fetch.js';
+import { errorWindow } from './fetch.js';
 
 const SubmitButtonText = {
   IDLE: 'Сохранить',
@@ -113,7 +114,9 @@ formCloseButton.addEventListener('click', closeForm);
 
 document.addEventListener('keydown', (evt) => {
   if (isEscKeydown(evt)) {
-    closeForm();
+    if (errorWindow.classList.contains('hidden')) {
+      closeForm();
+    }
   }
 });
 
