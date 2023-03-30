@@ -23,7 +23,7 @@ const pristine = new Pristine(uploadForm, {
 });
 
 // валидация поля хэштегов (разбита на три случая для вывода корректных сообщений об ошибке)
-function validateHashtagsByExaple (value) {
+const validateHashtagsByExample = (value) => {
   if (value === '') {
     return true;
   }
@@ -36,9 +36,9 @@ function validateHashtagsByExaple (value) {
     }
   }
   return true;
-}
+};
 
-function validateHashtagsByUsed (value) {
+const validateHashtagsByUsed = (value) => {
   const hashtags = value.trim().split(' ');
   const usedTags = {};
   for (let i = 0; i < hashtags.length; i++) {
@@ -52,19 +52,17 @@ function validateHashtagsByUsed (value) {
   }
   return true;
 
-}
+};
 
-function validateHashtagsByLength (value) {
+const validateHashtagsByLength = (value) => {
   const hashtags = value.trim().split(' ');
-  for (let i = 0; i < hashtags.length; i++) {
-    if (hashtags.length > 5) {
-      return false;
-    }
+  if (hashtags.length > 5) {
+    return false;
   }
   return true;
-}
+};
 
-pristine.addValidator(inputHashtags, validateHashtagsByExaple, 'Хэштег должен содержать только буквы и цифры, длина не более 20 символов!');
+pristine.addValidator(inputHashtags, validateHashtagsByExample, 'Хэштег должен содержать только буквы и цифры, длина не более 20 символов!');
 pristine.addValidator(inputHashtags, validateHashtagsByUsed, 'Хэштег уже использовался!');
 pristine.addValidator(inputHashtags, validateHashtagsByLength, 'Количество хэштегов - не более 5!');
 
@@ -74,10 +72,8 @@ inputHashtags.addEventListener('keyup', () => {
 });
 
 // валидация текста
-function validateText (value) {
+const validateText = (value) => value.length <= 140;
 
-  return value.length <= 140;
-}
 
 pristine.addValidator(inputText, validateText, 'Максимальная длина комментария - 140 символов');
 
@@ -96,20 +92,21 @@ inputText.addEventListener('keydown', (evt) => {
 });
 
 // открытие формы
-function onUploadButtonChange () {
+const onUploadButtonChange = () => {
   uploadOverlay.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
-}
+};
+
 uploadButton.addEventListener('change', onUploadButtonChange);
 
-
 // закрытие формы
-function closeForm () {
+const closeForm = () => {
   uploadOverlay.classList.add('hidden');
   uploadButton.value = '';
   document.querySelector('body').classList.remove('modal-open');
   uploadForm.reset();
-}
+};
+
 formCloseButton.addEventListener('click', closeForm);
 
 document.addEventListener('keydown', (evt) => {

@@ -6,7 +6,7 @@ import { isEscKeydown } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
-function onMiniatureClick (evt, objects) {
+const onMiniatureClick = (evt, objects) => {
   if (evt.target.closest('.picture')) {
     evt.preventDefault();
     const id = evt.target.closest('a').dataset.id;
@@ -27,13 +27,13 @@ function onMiniatureClick (evt, objects) {
     commentsLoader.addEventListener('click', onLoaderClick);
     document.querySelector('body').classList.add('modal-open');
   }
-}
+};
 
-function onCloseClick () {
+const onCloseClick = () => {
   bigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
   bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
-}
+};
 
 bigPicture.querySelector('.big-picture__cancel').addEventListener('click', onCloseClick);
 

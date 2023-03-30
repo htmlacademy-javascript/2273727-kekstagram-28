@@ -1,6 +1,6 @@
 // логика работы с комментариями
 
-function onLoaderClick () {
+const onLoaderClick = () => {
   const SHOWABLE_COMMENTS = 5;
   const commentContainer = document.querySelector('.social__comments');
   const commentsLength = commentContainer.children.length;
@@ -22,5 +22,6 @@ function onLoaderClick () {
     commentsHiddenLength = commentContainer.querySelectorAll('.hidden').length;
     visibleCommentsCount.textContent = commentsLength - commentsHiddenLength;
   }
-}
+};
+
 export {onLoaderClick};

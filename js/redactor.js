@@ -28,6 +28,7 @@ biggerScaleButton.addEventListener('click', () => {
 });
 
 // создание слайдера
+const sliderContainer = document.querySelector('.img-upload__effect-level');
 const sliderElement = document.querySelector('.effect-level__slider');
 const valueElement = document.querySelector('.effect-level__value');
 
@@ -107,26 +108,27 @@ const applyEffectSettings = (effectName) => {
   }
 };
 
-function onEffectCheck (evt) {
+const onEffectCheck = (evt) => {
   const effectName = evt.target.closest('.effects__item').querySelector('.effects__radio').value;
   if (evt.target.closest('.effects__item')) {
+    sliderContainer.classList.toggle('hidden', effectName === 'none');
     previewImage.className = '';
     sliderElement.classList.toggle('hidden', effectName === 'none');
     previewImage.classList.add(`effects__preview--${effectName}`);
     applyEffectSettings(effectName);
   }
-}
+};
 
 effectsContainer.addEventListener('change', onEffectCheck);
 
-function onUploadButtonChange () {
-  sliderElement.classList.add('hidden'); // чтобы по умолчанию у "оригинал" не было слайдера при переоткрытиях
-  previewImage.className = ''; // чтобы все эффекты сбрасывались при переоткрытии
-  previewImage.style.filter = ''; // чтобы сбрасывался стиль фото при переоткрытии
-  // чтобы сбрасывался масштаб фото
+const onUploadButtonChange = () => {
+  sliderContainer.classList.add('hidden');
+  previewImage.className = '';
+  previewImage.style.filter = '';
   scaleControlInputValue = 100;
   document.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
   previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
   updateButtonStatus();
-}
+};
+
 uploadButton.addEventListener('change', onUploadButtonChange);
