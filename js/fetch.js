@@ -2,6 +2,13 @@ import { renderPhotos, picturesContainer } from './rendering-mini.js';
 import { onMiniatureClick } from './rendering-full.js';
 import { getUniqueRandomInteger, isEscKeydown, showAlert, debounce } from './util.js';
 
+const RERENDER_DELAY = 500;
+
+const ErrorText = {
+  GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
+  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
+};
+
 const successTemplate = document.querySelector('#success').content.querySelector('.success');
 const successWindow = successTemplate.cloneNode(true);
 successWindow.classList.add('hidden');
@@ -66,17 +73,11 @@ const showError = () => {
   document.addEventListener('click', onErrorButtonClick);
 };
 
-const ErrorText = {
-  GET_DATA: 'Не удалось загрузить данные. Попробуйте обновить страницу',
-  SEND_DATA: 'Не удалось отправить форму. Попробуйте ещё раз',
-};
-
 const filterList = document.querySelector('.img-filters');
 const compareByDiscussed = (a, b) => b.comments.length - a.comments.length;
 const filterButtons = document.querySelectorAll('.img-filters__button');
 const activeClass = 'img-filters__button--active';
 
-const RERENDER_DELAY = 500;
 const defaultFilterButton = filterList.querySelector('#filter-default');
 const randomFilterButton = filterList.querySelector('#filter-random');
 const discussedFilterButton = filterList.querySelector('#filter-discussed');
