@@ -18,8 +18,7 @@ const onMiniatureClick = (evt, objects) => {
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id, objects);
 
-    const commentContainer = bigPicture.querySelector('.social__comments');
-    const commentsLength = commentContainer.children.length;
+    const commentsLength = bigPicture.querySelector('.social__comments').children.length;
     const commentsLoader = bigPicture.querySelector('.comments-loader');
     commentsLoader.classList.toggle('hidden', commentsLength <= 5);
     bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > 5) ? 5 : commentsLength;
@@ -45,4 +44,4 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
-export {onMiniatureClick};
+export { onMiniatureClick };

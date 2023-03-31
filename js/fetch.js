@@ -1,5 +1,4 @@
-import { renderPhotos } from './rendering-mini.js';
-import { picturesContainer } from './rendering-mini.js';
+import { renderPhotos, picturesContainer } from './rendering-mini.js';
 import { onMiniatureClick } from './rendering-full.js';
 import { getUniqueRandomInteger, isEscKeydown, showAlert, debounce } from './util.js';
 
@@ -9,11 +8,11 @@ successWindow.classList.add('hidden');
 document.body.append(successWindow);
 
 const showSuccess = () => {
-  successWindow.classList.remove('hidden');
   const closeSuccessButton = successWindow.querySelector('.success__button');
   const successInner = document.querySelector('.success__inner');
   const closeSuccessWindow = () => {
     successWindow.classList.add('hidden');
+    document.querySelector('body').classList.remove('modal-open');
   };
 
   closeSuccessButton.addEventListener('click', closeSuccessWindow);
@@ -30,7 +29,8 @@ const showSuccess = () => {
       document.removeEventListener('click', onSuccessButtonClick);
     }
   };
-
+  successWindow.classList.remove('hidden');
+  document.querySelector('body').classList.add('modal-open');
   document.addEventListener('click', onSuccessButtonClick);
 };
 
@@ -40,11 +40,11 @@ errorWindow.classList.add('hidden');
 document.body.append(errorWindow);
 
 const showError = () => {
-  errorWindow.classList.remove('hidden');
   const closeErrorButton = errorWindow.querySelector('.error__button');
-  const errorInner = document.querySelector('.error__inner');
+  const errorInnerField = document.querySelector('.error__inner');
   const closeErrorWindow = () => {
     errorWindow.classList.add('hidden');
+    document.querySelector('body').classList.remove('modal-open');
   };
 
   closeErrorButton.addEventListener('click', () => errorWindow.classList.add('hidden'));
@@ -56,12 +56,13 @@ const showError = () => {
   });
 
   const onErrorButtonClick = (evt) => {
-    if (evt.target !== errorInner) {
+    if (evt.target !== errorInnerField) {
       closeErrorWindow();
       document.removeEventListener('click', onErrorButtonClick);
     }
   };
-
+  errorWindow.classList.remove('hidden');
+  document.querySelector('body').classList.add('modal-open');
   document.addEventListener('click', onErrorButtonClick);
 };
 
@@ -76,9 +77,9 @@ const filterButtons = document.querySelectorAll('.img-filters__button');
 const activeClass = 'img-filters__button--active';
 
 const RERENDER_DELAY = 500;
-const buttonFilterDefault = filterList.querySelector('#filter-default');
-const buttonFilterRandom = filterList.querySelector('#filter-random');
-const buttonFilterDiscussed = filterList.querySelector('#filter-discussed');
+const defaultFilterButton = filterList.querySelector('#filter-default');
+const randomFilterButton = filterList.querySelector('#filter-random');
+const discussedFilterButton = filterList.querySelector('#filter-discussed');
 
 const toggleButtons = (filterId) => filterButtons.forEach((btn) => btn.classList.toggle(activeClass, btn.id === filterId));
 
@@ -89,14 +90,14 @@ filterButtons.forEach((btn) => {
   });
 });
 
-const setFilterDefaultClick = (objects) => {
-  buttonFilterDefault.addEventListener('click', debounce(() => {
+const setDefaultFilterClick = (objects) => {
+  defaultFilterButton.addEventListener('click', debounce(() => {
     renderPhotos(objects);
   }, RERENDER_DELAY));
 };
 
-const setFilterRandomClick = (objects) => {
-  buttonFilterRandom.addEventListener('click', debounce(() => {
+const setRandomFilterClick = (objects) => {
+  randomFilterButton.addEventListener('click', debounce(() => {
     const randomObjects = [];
     const randomIndex = getUniqueRandomInteger(0, 24);
     for (let i = 0; i < 10; i++) {
@@ -106,8 +107,8 @@ const setFilterRandomClick = (objects) => {
   }, RERENDER_DELAY));
 };
 
-const setFilterDiscussedClick = (objects) => {
-  buttonFilterDiscussed.addEventListener('click', debounce(() => {
+const setDiscussedFilterClick = (objects) => {
+  discussedFilterButton.addEventListener('click', debounce(() => {
     renderPhotos(objects, compareByDiscussed);
   }, RERENDER_DELAY));
 };
@@ -125,9 +126,9 @@ const getData = async () => {
   }
   const objects = await response.json();
   renderPhotos(objects);
-  setFilterDefaultClick(objects);
-  setFilterRandomClick(objects);
-  setFilterDiscussedClick(objects);
+  setDefaultFilterClick(objects);
+  setRandomFilterClick(objects);
+  setDiscussedFilterClick(objects);
   picturesContainer.addEventListener('click', (evt) => onMiniatureClick(evt, objects));
   filterList.classList.remove('img-filters--inactive');
 };
@@ -153,4 +154,4 @@ const sendData = async (body, onSuccess) => {
   }
 };
 
-export { errorWindow, getData, sendData, setFilterDefaultClick, setFilterDiscussedClick, setFilterRandomClick };
+export { errorWindow, getData, sendData };

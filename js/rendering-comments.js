@@ -29,4 +29,4 @@ const renderComments = (id, objects) => {
   commentContainer.append(fragment);
 };
 
-export {renderComments};
+export { renderComments };

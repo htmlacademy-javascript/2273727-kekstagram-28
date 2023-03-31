@@ -1,27 +1,27 @@
 // логика работы с комментариями
 
 const onLoaderClick = () => {
-  const SHOWABLE_COMMENTS = 5;
-  const commentContainer = document.querySelector('.social__comments');
-  const commentsLength = commentContainer.children.length;
+  const SHOWABLE_COMMENTS_COUNT = 5;
+  const commentsContainer = document.querySelector('.social__comments');
+  const commentsLength = commentsContainer.children.length;
   const commentsLoader = document.querySelector('.comments-loader');
   const visibleCommentsCount = document.querySelector('.visible-comments-count');
-  let commentsHiddenLength = commentContainer.querySelectorAll('.hidden').length;
+  let hiddenCommentsLength = commentsContainer.querySelectorAll('.hidden').length;
 
-  if (commentsHiddenLength > SHOWABLE_COMMENTS) {
-    for (let i = 0; i <= commentsLength - commentsHiddenLength - 1 + SHOWABLE_COMMENTS; i++) {
-      commentContainer.children[i].classList.remove('hidden');
+  if (hiddenCommentsLength > SHOWABLE_COMMENTS_COUNT) {
+    for (let i = 0; i <= commentsLength - hiddenCommentsLength - 1 + SHOWABLE_COMMENTS_COUNT; i++) {
+      commentsContainer.children[i].classList.remove('hidden');
     }
-    commentsHiddenLength = commentContainer.querySelectorAll('.hidden').length;
-    visibleCommentsCount.textContent = commentsLength - commentsHiddenLength;
+    hiddenCommentsLength = commentsContainer.querySelectorAll('.hidden').length;
+    visibleCommentsCount.textContent = commentsLength - hiddenCommentsLength;
   } else {
     for (let i = 0; i <= commentsLength - 1; i++) {
-      commentContainer.children[i].classList.remove('hidden');
+      commentsContainer.children[i].classList.remove('hidden');
     }
     commentsLoader.classList.add('hidden');
-    commentsHiddenLength = commentContainer.querySelectorAll('.hidden').length;
-    visibleCommentsCount.textContent = commentsLength - commentsHiddenLength;
+    hiddenCommentsLength = commentsContainer.querySelectorAll('.hidden').length;
+    visibleCommentsCount.textContent = commentsLength - hiddenCommentsLength;
   }
 };
 
-export {onLoaderClick};
+export { onLoaderClick };

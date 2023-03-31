@@ -11,7 +11,7 @@ const updateButtonStatus = () => {
   smallerScaleButton.disabled = scaleControlInputValue <= 25;
   biggerScaleButton.disabled = scaleControlInputValue >= 100;
 };
-updateButtonStatus();
+
 
 smallerScaleButton.addEventListener('click', () => {
   scaleControlInputValue -= 25;
@@ -121,6 +121,7 @@ const onEffectCheck = (evt) => {
 
 effectsContainer.addEventListener('change', onEffectCheck);
 
+// срабатывание загрузки фото
 const onUploadButtonChange = () => {
   sliderContainer.classList.add('hidden');
   previewImage.className = '';
