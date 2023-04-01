@@ -1,11 +1,13 @@
 // логика работы с комментариями
 
+const SHOWABLE_COMMENTS_COUNT = 5;
+
+const commentsContainer = document.querySelector('.social__comments');
+const commentsLoader = document.querySelector('.comments-loader');
+const visibleCommentsCount = document.querySelector('.visible-comments-count');
+
 const onLoaderClick = () => {
-  const SHOWABLE_COMMENTS_COUNT = 5;
-  const commentsContainer = document.querySelector('.social__comments');
   const commentsLength = commentsContainer.children.length;
-  const commentsLoader = document.querySelector('.comments-loader');
-  const visibleCommentsCount = document.querySelector('.visible-comments-count');
   let hiddenCommentsLength = commentsContainer.querySelectorAll('.hidden').length;
 
   if (hiddenCommentsLength > SHOWABLE_COMMENTS_COUNT) {
@@ -24,4 +26,4 @@ const onLoaderClick = () => {
   }
 };
 
-export { onLoaderClick };
+export { SHOWABLE_COMMENTS_COUNT, commentsContainer, commentsLoader, onLoaderClick };

@@ -13,10 +13,10 @@ const successTemplate = document.querySelector('#success').content.querySelector
 const successWindow = successTemplate.cloneNode(true);
 successWindow.classList.add('hidden');
 document.body.append(successWindow);
+const closeSuccessButton = successWindow.querySelector('.success__button');
+const successInner = document.querySelector('.success__inner');
 
 const showSuccess = () => {
-  const closeSuccessButton = successWindow.querySelector('.success__button');
-  const successInner = document.querySelector('.success__inner');
   const closeSuccessWindow = () => {
     successWindow.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
@@ -45,10 +45,10 @@ const errorTemplate = document.querySelector('#error').content.querySelector('.e
 const errorWindow = errorTemplate.cloneNode(true);
 errorWindow.classList.add('hidden');
 document.body.append(errorWindow);
+const closeErrorButton = errorWindow.querySelector('.error__button');
+const errorInnerField = document.querySelector('.error__inner');
 
 const showError = () => {
-  const closeErrorButton = errorWindow.querySelector('.error__button');
-  const errorInnerField = document.querySelector('.error__inner');
   const closeErrorWindow = () => {
     errorWindow.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');

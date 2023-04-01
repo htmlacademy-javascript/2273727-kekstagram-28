@@ -1,7 +1,7 @@
 // логика отрисовщика большого фото и комментариев
 
 import { renderComments } from './rendering-comments.js';
-import { onLoaderClick } from './change-comments.js';
+import { SHOWABLE_COMMENTS_COUNT, commentsLoader, onLoaderClick } from './change-comments.js';
 import { isEscKeydown } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
@@ -19,9 +19,8 @@ const onMiniatureClick = (evt, objects) => {
     renderComments(id, objects);
 
     const commentsLength = bigPicture.querySelector('.social__comments').children.length;
-    const commentsLoader = bigPicture.querySelector('.comments-loader');
-    commentsLoader.classList.toggle('hidden', commentsLength <= 5);
-    bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > 5) ? 5 : commentsLength;
+    commentsLoader.classList.toggle('hidden', commentsLength <= SHOWABLE_COMMENTS_COUNT);
+    bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > SHOWABLE_COMMENTS_COUNT) ? SHOWABLE_COMMENTS_COUNT : commentsLength;
 
     commentsLoader.addEventListener('click', onLoaderClick);
     document.querySelector('body').classList.add('modal-open');

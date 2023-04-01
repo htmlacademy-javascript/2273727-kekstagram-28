@@ -3,6 +3,9 @@
 import { isEscKeydown, showAlert } from './util.js';
 import { sendData, errorWindow } from './fetch.js';
 
+const MAX_HASHTAGS_COUNT = 5;
+const MAX_TEXT_LENGTH = 140;
+
 const SubmitButtonText = {
   IDLE: 'Сохранить',
   SENDING: 'Сохраняю...'
@@ -15,6 +18,7 @@ const formCloseButton = uploadForm.querySelector('.img-upload__cancel');
 const hashtagsInput = uploadForm.querySelector('.text__hashtags');
 const textInput = uploadForm.querySelector('.text__description');
 const submitButton = uploadForm.querySelector('.img-upload__submit');
+
 const pristine = new Pristine(uploadForm, {
   classTo: 'img-upload__field-wrapper',
   errorTextParent: 'img-upload__field-wrapper',
@@ -54,7 +58,7 @@ const validateHashtagsByUsed = (value) => {
 
 const validateHashtagsByLength = (value) => {
   const hashtags = value.trim().split(' ');
-  if (hashtags.length > 5) {
+  if (hashtags.length > MAX_HASHTAGS_COUNT) {
     return false;
   }
   return true;
@@ -70,9 +74,9 @@ hashtagsInput.addEventListener('keyup', () => {
 });
 
 // валидация текста
-const validateText = (value) => value.length <= 140;
+const validateText = (value) => value.length <= MAX_TEXT_LENGTH;
 
-pristine.addValidator(textInput, validateText, 'Максимальная длина комментария - 140 символов');
+pristine.addValidator(textInput, validateText, `Максимальная длина комментария - ${MAX_TEXT_LENGTH} символов`);
 
 textInput.addEventListener('keyup', () => {
   pristine.validate();

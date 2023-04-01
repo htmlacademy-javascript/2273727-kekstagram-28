@@ -1,27 +1,31 @@
 // Логика обработки фото
 
 // логика работы масштабирования фото
+const MIN_SCALE = 25;
+const MAX_SCALE = 100;
+const SCALE_STEP = 25;
+
 const uploadButton = document.querySelector('.img-upload__input');
 const smallerScaleButton = document.querySelector('.scale__control--smaller');
 const biggerScaleButton = document.querySelector('.scale__control--bigger');
-let scaleControlInputValue = 100;
+let scaleControlInputValue = MAX_SCALE;
 const previewImage = document.querySelector('.img-upload__preview img');
 
 const updateButtonStatus = () => {
-  smallerScaleButton.disabled = scaleControlInputValue <= 25;
-  biggerScaleButton.disabled = scaleControlInputValue >= 100;
+  smallerScaleButton.disabled = scaleControlInputValue <= MIN_SCALE;
+  biggerScaleButton.disabled = scaleControlInputValue >= MAX_SCALE;
 };
 
 
 smallerScaleButton.addEventListener('click', () => {
-  scaleControlInputValue -= 25;
+  scaleControlInputValue -= SCALE_STEP;
   document.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
   previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
   updateButtonStatus();
 });
 
 biggerScaleButton.addEventListener('click', () => {
-  scaleControlInputValue += 25;
+  scaleControlInputValue += SCALE_STEP;
   document.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
   previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
   updateButtonStatus();
@@ -126,7 +130,7 @@ const onUploadButtonChange = () => {
   sliderContainer.classList.add('hidden');
   previewImage.className = '';
   previewImage.style.filter = '';
-  scaleControlInputValue = 100;
+  scaleControlInputValue = MAX_SCALE;
   document.querySelector('.scale__control--value').value = `${scaleControlInputValue}%`;
   previewImage.style.transform = `scale(${scaleControlInputValue}%)`;
   updateButtonStatus();
