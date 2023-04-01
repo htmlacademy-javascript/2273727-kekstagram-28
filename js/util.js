@@ -1,10 +1,11 @@
-// хранилище вычислительных функций
+// хранилище вспомогательных функций
 
+const ALERT_SHOW_TIME = 2000;
 const getRandomInteger = (min, max) => Math.floor(Math.random() * (Math.floor(max) - Math.ceil(min) + 1)) + min;
 
 const getUniqueRandomInteger = (min, max) => {
   const previousValues = [];
-  return function () {
+  return () => {
     let currentValue = getRandomInteger(min, max);
     if (previousValues.length >= (max - min + 1)) {
       return null;
@@ -19,7 +20,6 @@ const getUniqueRandomInteger = (min, max) => {
 
 const isEscKeydown = (evt) => evt.key === 'Escape';
 
-const ALERT_SHOW_TIME = 2000;
 const showAlert = (message) => {
   const alertContainer = document.createElement('div');
   alertContainer.style.zIndex = '100';

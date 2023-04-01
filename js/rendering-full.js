@@ -1,12 +1,12 @@
 // логика отрисовщика большого фото и комментариев
 
 import { renderComments } from './rendering-comments.js';
-import { onLoaderClick } from './change-comments.js';
+import { SHOWABLE_COMMENTS_COUNT, commentsLoader, onLoaderClick } from './change-comments.js';
 import { isEscKeydown } from './util.js';
 
 const bigPicture = document.querySelector('.big-picture');
 
-function onMiniatureClick (evt, objects) {
+const onMiniatureClick = (evt, objects) => {
   if (evt.target.closest('.picture')) {
     evt.preventDefault();
     const id = evt.target.closest('a').dataset.id;
@@ -18,22 +18,20 @@ function onMiniatureClick (evt, objects) {
     bigPicture.querySelector('.comments-count').textContent = objects[id].comments.length;
     renderComments(id, objects);
 
-    const commentContainer = bigPicture.querySelector('.social__comments');
-    const commentsLength = commentContainer.children.length;
-    const commentsLoader = bigPicture.querySelector('.comments-loader');
-    commentsLoader.classList.toggle('hidden', commentsLength <= 5);
-    bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > 5) ? 5 : commentsLength;
+    const commentsLength = bigPicture.querySelector('.social__comments').children.length;
+    commentsLoader.classList.toggle('hidden', commentsLength <= SHOWABLE_COMMENTS_COUNT);
+    bigPicture.querySelector('.visible-comments-count').textContent = (commentsLength > SHOWABLE_COMMENTS_COUNT) ? SHOWABLE_COMMENTS_COUNT : commentsLength;
 
     commentsLoader.addEventListener('click', onLoaderClick);
     document.querySelector('body').classList.add('modal-open');
   }
-}
+};
 
-function onCloseClick () {
+const onCloseClick = () => {
   bigPicture.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
   bigPicture.querySelector('.comments-loader').removeEventListener('click', onLoaderClick);
-}
+};
 
 bigPicture.querySelector('.big-picture__cancel').addEventListener('click', onCloseClick);
 
@@ -45,4 +43,4 @@ document.addEventListener('keydown', (evt) => {
   }
 });
 
-export {onMiniatureClick};
+export { onMiniatureClick };

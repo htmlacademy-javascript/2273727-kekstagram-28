@@ -1,8 +1,9 @@
 // логика рендера комментов
 
+import { commentsContainer } from './change-comments.js';
+
 const renderComments = (id, objects) => {
   const fragment = document.createDocumentFragment();
-  const commentContainer = document.querySelector('.social__comments');
 
   for (let i = 0; i < objects[id].comments.length; i++) {
     const li = document.createElement('li');
@@ -25,8 +26,8 @@ const renderComments = (id, objects) => {
     fragment.append(li);
   }
 
-  commentContainer.innerHTML = '';
-  commentContainer.append(fragment);
+  commentsContainer.innerHTML = '';
+  commentsContainer.append(fragment);
 };
 
-export {renderComments};
+export { renderComments };

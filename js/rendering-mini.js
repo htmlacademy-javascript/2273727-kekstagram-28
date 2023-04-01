@@ -26,4 +26,4 @@ const renderPhotos = (objects, sortMethod) => {
   picturesContainer.append(fragment);
 };
 
-export {renderPhotos, picturesContainer};
+export { renderPhotos, picturesContainer };
